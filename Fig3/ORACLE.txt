@@ -1,0 +1,24 @@
+Gene Symbol	Model Coefficient	Gene Name	Description of Gene Function	Published Signature
+ANLN	0.058692239	Anillin Actin Binding Protein	Required for cytokinesis (cleavage furrow)	-
+ASPM	0.003462241	Abnormal Spindle Microtubule Assembly	Mitotic spindle regulation	"Krzystanek Biomarker Res 2016, Wistuba CCR 2013"
+CDCA4	0.041940166	Cell Division Cycle Associated 4	Regulates cell proliferation via E2F/RB pathway	-
+ERRFI1	0.013237564	ERBB Receptor Feedback Inhibitor 1	"Up-regulated with cell growth, negatively regulates EGFR signaling"	-
+FURIN	0.208437458	"Furin, Paired Basic Amino Acid Cleaving Enzyme"	"Pro-protein convertase binding TGF-beta, NGF, and MMP1 amonst others."	Beer Nat Med 2002
+GOLGA8A	-0.028493707	Golgin A8 Family Member A	Maintains structure of golgi apparatus	-
+ITGA6	0.058464556	Integrin Subunit Alpha 6	Essential for IGF1 and IGF2 signaling	-
+JAG1	0.012599497	Jagged 1	Ligand for Notch signalling	-
+LRP12	0.038410107	LDL Receptor Related Protein 12	"involved in the internalization of lipophilic molecules and/or signal transduction, may act as a tumor suppressor"	-
+MAFF	0.075070616	MAF BZIP Transcription Factor F	Involved in transcriptional activation and repression	-
+MRPS17	0.146466169	Mitochondrial Ribosomal Protein S17	Mitochondrial protein synthesis	-
+PLK1	0.029842311	Polo Like Kinase 1	Ser/Thr kinase involved in cell proliferation and cell survival; M-phase of cell cycle	Wistuba CCR 2013
+PNP	0.01177481	Purine Nucleoside Phosphorylase	"Involved in (de novo) nucleotide salvage pathway, which is often interrupted by chemotherapy drugs"	Beer Nat Med 2002
+PPP1R13L	0.062382956	Protein Phosphatase 1 Regulatory Subunit 13 Like	Inhibitor of p53	-
+PRKCA	0.038900124	Protein Kinase C Alpha	Ser/Thr kinase involved in cell proliferation (via cell cycle)	Raz CCR 2008
+PTTG1	0.082889189	Pituitary Tumor-Transforming 1	"Regulatory protein involved in chromosome stability, p53 pathway, and DNA repair"	Wistuba CCR 2013
+PYGB	0.143943497	Glycogen Phosphorylase B	Regulates glycogen mobilization	-
+RPP25	0.019158495	Ribonuclease P And MRP Subunit P25	"Component of ribonuclease P, a protein complex that generates mature tRNA molecules by cleaving their 5-ends"	-
+SCPEP1	-0.00145441	Serine Carboxypeptidase 1	May be involved in vascular wall (and kidney) homeostasis	-
+SLC46A3	-0.031597666	Solute Carrier Family 46 Member 3	Lysosomal transmembrane protein; effective transporter of the cancer cytotoxic drug maytansine.	-
+SNX7	0.133634555	Sorting Nexin 7	involved in intracellular trafficking	-
+TPBG	0.012242067	Trophoblast Glycoprotein	"oncofetal antigen that is specific to trophoblast cells, in adults this protein is highly expressed in many tumor cells and is associated with poor clinical outcome in numerous cancers."	Beer Nat Med 2002
+XBP1	-0.121354561	X-Box Binding Protein 1	Transcription factor regulating 1) MHCII genes and 2) ER stress during Unfolded Protein Response	-
