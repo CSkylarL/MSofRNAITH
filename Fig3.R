@@ -1,9 +1,7 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # Fig.3
 # Author: Chao Cheng; Chenyang Li
-# CPRIT-MIRA  Result is not significant due to the limit sample size,
-#             But the cox regression and C-index have the same trend 
-#             --> show C-index
+# Note: CPRIT-MIRA is the MDAMPLC cohort
 # 12/14/2022
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # [1] TRACERx ##################################################################
@@ -11,11 +9,11 @@
 # [1.1] ORACLE Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
 myinf2 <- paste0(outdir,"/ORACLE.txt")
-myinf3 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+myinf3 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
 
 myoutf1 <- paste0(outdir,"/ORACLE_scores_TRACERx.txt")
 myoutf2 <- paste0(outdir,"/ORACLE_M2_Region_TRACERx.txt")
@@ -124,10 +122,10 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
 myinf1 <- paste0(outdir,"/ORACLE_scores_TRACERx.txt")
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
 
 myFig1 <- paste0(outdir,"/ORACLE_scores_forest_TRACERx.pdf")
 myFig2 <- paste0(outdir,"/ORACLE_scores_CIbar_TRACERx.pdf")
@@ -246,13 +244,13 @@ dev.off()
 # [1.3] WTGS Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
-myinf2 <- "~/ChaoCheng/Rprogram/BASE/TCGA-Lung-Prog-Profile_4base.txt"
-myinf3 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf2 <- "./BASE/TCGA-Lung-Prog-Profile_4base.txt"
+myinf3 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
 
-myfun1 <- "~/ChaoCheng/Rprogram/BASE/base5.R"
+myfun1 <- "./BASE/base5.R"
 
 myoutf1 <- paste0(outdir,"/WTGS_scores_TRACERx.txt")
 myoutf2 <- paste0(outdir,"/WTGS_M2_Region_TRACERx.txt")
@@ -300,7 +298,6 @@ dim(data) #  23   161
 # d) M1 Trasformed gene expression score ---------------------------------------
 tmp <- matrix(0, nrow(data), length(mypat))
 row.names(tmp) <- row.names(data)
-all(row.names(tmp)  == names(WTGS_coefficient)) # T
 colnames(tmp) <- mypat
 dat.rev <- dat.adj <- dat.avg <- dat.max <- dat.min <- tmp
 # patient gene expression 
@@ -387,10 +384,10 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
 myinf1 <- paste0(outdir,"/WTGS_scores_TRACERx.txt")
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
 
 myFig1 <- paste0(outdir,"/WTGS_scores_forest_TRACERx.pdf")
 myFig2 <- paste0(outdir,"/WTGS_scores_CIbar_TRACERx.pdf")
@@ -509,11 +506,11 @@ dev.off()
 # [1.5] PACEG Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
 myinf2 <- paste0(outdir,"/PACEG.txt")
-myinf3 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+myinf3 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
 
 myoutf1 <- paste0(outdir,"/PACEG_scores_TRACERx.txt")
 myoutf2 <- paste0(outdir,"/PACEG_M2_Region_TRACERx.txt")
@@ -621,10 +618,10 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
 myinf1 <- paste0(outdir,"/PACEG_scores_TRACERx.txt")
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
 
 myFig1 <- paste0(outdir,"/PACEG_scores_forest_TRACERx.pdf")
 myFig2 <- paste0(outdir,"/PACEG_scores_CIbar_TRACERx.pdf")
@@ -744,23 +741,19 @@ dev.off()
 # [2.1] ORACLE Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf1 <-  "./data/MDAMPLC.rda"
 myinf2 <- paste0(outdir,"/ORACLE.txt")
-myinf3 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/Clinical_Sample_info/CohortC_CPRIT-MIRA_clinical_info.csv"
 
 myoutf1 <- paste0(outdir,"/ORACLE_scores_CPRIT-MIRA.txt")
 myoutf2 <- paste0(outdir,"/ORACLE_M2_Region_CPRIT-MIRA.txt")
 # a) expression and signature  -------------------------------------------------
+load(myinf1)
+data <- RNAseq
 
-data <- read.table(myinf1, sep="\t", header=T, check.names=F)
 oracle <- read.table(myinf2,sep="\t",header = T)
 
-# remove normal
-se <- which(substr(colnames(data), 11, 11) =="T"  )
-data <- data[,se]
-dim(data)		
 
 # confirm the same order of gene
 row.names(oracle) <- oracle$Gene.Symbol
@@ -776,24 +769,13 @@ names(oracle_coefficient) <- oracle$Gene.Symbol
 
 data <- log2(data+1)
 # c) survival info -------------------------------------------------------------
-info <- read.csv(myinf3, header=T, row.names=1)
-
-e.surv <- replace(info$Relapse, 17, "Y") 
-# 17 is continuous but other column show it has relapse
-t.surv <- info$PFS..Date.of.the.biopsy.to.confirm.relapse.Date.of.surgery..months
-
-# To be consistent with cohortD, the event is Recurrence.or.death
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "Y")
-info[se,]
-e.surv[se] <- info$Deceased..Y.N.[se]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "N")
-info[se,]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-e.surv <- ifelse(e.surv == "Y",1,0)
-info <- cbind(t.surv, e.surv, info)
+info <- Clinical.info
+colnames(info) <-  c("t.surv","e.surv", 
+                     "Smoker.current.never.former",
+                     "Gender.Male.Female" ,         
+                     "Diagnosis.Age"  ,
+                     "Stage" ,
+                     "Subtype"         )
 
 pid <-  substr(colnames(data), 1, 6)
 comxx <- intersect(row.names(info), pid)
@@ -874,39 +856,29 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
 myinf1 <- paste0(outdir,"/ORACLE_scores_CPRIT-MIRA.txt")
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/Clinical_Sample_info/CohortC_CPRIT-MIRA_clinical_info.csv"
+myinf2 <- "./data/MDAMPLC.rda"
 
 myFig1 <- paste0(outdir,"/ORACLE_scores_forest_CPRIT-MIRA.pdf")
 myFig2 <- paste0(outdir,"/ORACLE_scores_CIbar_CPRIT-MIRA.pdf")
 # a) load data -----------------------------------------------------------------
 data <- read.table(myinf1, sep="\t", header=T, row.names=1, quote="")
-info <- read.csv(myinf2, header=T, row.names=1)
+load(myinf2)
+
+info <- Clinical.info
+colnames(info) <-  c("t.surv","e.surv", 
+                     "Smoker.current.never.former",
+                     "Gender.Male.Female" ,         
+                     "Diagnosis.Age"  ,
+                     "Stage" ,
+                     "Subtype"         )
 
 
 comxx <- intersect(row.names(data), row.names(info))
 info <- info[comxx,]
 data <- data[comxx,]
-
-# survival info
-e.surv <- replace(info$Relapse, 17, "Y") 
-# 17 is continuous but other column show it has relapse
-t.surv <- info$PFS..Date.of.the.biopsy.to.confirm.relapse.Date.of.surgery..months
-
-# To be consistent with cohortD, the event is Recurrence.or.death
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "Y")
-info[se,]
-e.surv[se] <- info$Deceased..Y.N.[se]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "N")
-info[se,]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-e.surv <- ifelse(e.surv == "Y",1,0)
-info <- cbind(t.surv, e.surv, info)
 
 mydata <- cbind(data, info)
 mydata <- mydata[mydata[, "t.surv"]>0,]
@@ -1021,24 +993,21 @@ dev.off()
 # [2.3] WTGS Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
-myinf2 <- "~/ChaoCheng/Rprogram/BASE/TCGA-Lung-Prog-Profile_4base.txt"
-myinf3 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/Clinical_Sample_info/CohortC_CPRIT-MIRA_clinical_info.csv"
+myinf1 <- "./data/MDAMPLC.rda"
 
-myfun1 <- "~/ChaoCheng/Rprogram/BASE/base5.R"
+myinf2 <- "./BASE/TCGA-Lung-Prog-Profile_4base.txt"
+
+myfun1 <- "./BASE/base5.R"
 
 myoutf1 <- paste0(outdir,"/WTGS_scores_CPRIT-MIRA.txt")
 myoutf2 <- paste0(outdir,"/WTGS_M2_Region_CPRIT-MIRA.txt")
 
 # a) expression data  -------------------------------------------------
-data <- read.table(myinf1, sep="\t", header=T, check.names=F)
+load(myinf1)
+data <- RNAseq
 
-# remove normal
-se <- which(substr(colnames(data), 11, 11) =="T"  )
-data <- data[,se]
-dim(data)		
 
 # remove low expression 
 xx = apply(data>0,1,sum)
@@ -1059,24 +1028,14 @@ dim(data) # 13469   161
 
 all(row.names(data)  == rownames(mywt)) # T
 # c) survival info -------------------------------------------------------------
-info <- read.csv(myinf3, header=T, row.names=1)
 
-e.surv <- replace(info$Relapse, 17, "Y") 
-# 17 is continuous but other column show it has relapse
-t.surv <- info$PFS..Date.of.the.biopsy.to.confirm.relapse.Date.of.surgery..months
-
-# To be consistent with cohortD, the event is Recurrence.or.death
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "Y")
-info[se,]
-e.surv[se] <- info$Deceased..Y.N.[se]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "N")
-info[se,]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-e.surv <- ifelse(e.surv == "Y",1,0)
-info <- cbind(t.surv, e.surv, info)
+info <- Clinical.info
+colnames(info) <-  c("t.surv","e.surv", 
+                     "Smoker.current.never.former",
+                     "Gender.Male.Female" ,         
+                     "Diagnosis.Age"  ,
+                     "Stage" ,
+                     "Subtype"         )
 
 pid <-  substr(colnames(data), 1, 6)
 comxx <- intersect(row.names(info), pid)
@@ -1093,7 +1052,6 @@ dim(data) #  23   161
 # d) M1 Trasformed gene expression score ---------------------------------------
 tmp <- matrix(0, nrow(data), length(mypat))
 row.names(tmp) <- row.names(data)
-all(row.names(tmp)  == names(WTGS_coefficient)) # T
 colnames(tmp) <- mypat
 dat.rev <- dat.adj <- dat.avg <- dat.max <- dat.min <- tmp
 # patient gene expression 
@@ -1179,39 +1137,30 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
 myinf1 <- paste0(outdir,"/WTGS_scores_CPRIT-MIRA.txt")
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/Clinical_Sample_info/CohortC_CPRIT-MIRA_clinical_info.csv"
+myinf2 <- "./data/MDAMPLC.rda"
 
 myFig1 <- paste0(outdir,"/WTGS_scores_forest_CPRIT-MIRA.pdf")
 myFig2 <- paste0(outdir,"/WTGS_scores_CIbar_CPRIT-MIRA.pdf")
 
 # a) load data -----------------------------------------------------------------
 data <- read.table(myinf1, sep="\t", header=T, row.names=1, quote="")
-info <- read.csv(myinf2, header=T, row.names=1)
+load(myinf2)
+
+info <- Clinical.info
+colnames(info) <-  c("t.surv","e.surv", 
+                     "Smoker.current.never.former",
+                     "Gender.Male.Female" ,         
+                     "Diagnosis.Age"  ,
+                     "Stage" ,
+                     "Subtype"         )
 
 comxx <- intersect(row.names(data), row.names(info))
 info <- info[comxx,]
 data <- data[comxx,]
 
-# survival info
-e.surv <- replace(info$Relapse, 17, "Y") 
-# 17 is continuous but other column show it has relapse
-t.surv <- info$PFS..Date.of.the.biopsy.to.confirm.relapse.Date.of.surgery..months
-
-# To be consistent with cohortD, the event is Recurrence.or.death
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "Y")
-info[se,]
-e.surv[se] <- info$Deceased..Y.N.[se]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "N")
-info[se,]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-e.surv <- ifelse(e.surv == "Y",1,0)
-info <- cbind(t.surv, e.surv, info)
 
 mydata <- cbind(data, info)
 mydata <- mydata[mydata[, "t.surv"]>0,]
@@ -1332,23 +1281,18 @@ dev.off()
 # [2.5] PACEG Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf1 <- "./data/MDAMPLC.rda"
 myinf2 <- paste0(outdir,"/PACEG.txt")
-myinf3 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/Clinical_Sample_info/CohortC_CPRIT-MIRA_clinical_info.csv"
 
 myoutf1 <- paste0(outdir,"/PACEG_scores_CPRIT-MIRA.txt")
 myoutf2 <- paste0(outdir,"/PACEG_M2_Region_CPRIT-MIRA.txt")
 # a) expression and signature  -------------------------------------------------
-
-data <- read.table(myinf1, sep="\t", header=T, check.names=F)
+load(myinf1)
+data <- RNAseq
 PACEG <- read.table(myinf2,sep="\t",header = T)
 
-# remove normal
-se <- which(substr(colnames(data), 11, 11) =="T"  )
-data <- data[,se]
-dim(data)	
 # confirm the same order of gene
 row.names(PACEG) <- PACEG$gene
 comxx <- intersect(row.names(data), row.names(PACEG))
@@ -1363,24 +1307,13 @@ names(PACEG_coefficient) <- PACEG$gene
 
 data <- log2(data+1)
 # c) survival info -------------------------------------------------------------
-info <- read.csv(myinf3, header=T, row.names=1)
-
-e.surv <- replace(info$Relapse, 17, "Y") 
-# 17 is continuous but other column show it has relapse
-t.surv <- info$PFS..Date.of.the.biopsy.to.confirm.relapse.Date.of.surgery..months
-
-# To be consistent with cohortD, the event is Recurrence.or.death
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "Y")
-info[se,]
-e.surv[se] <- info$Deceased..Y.N.[se]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "N")
-info[se,]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-e.surv <- ifelse(e.surv == "Y",1,0)
-info <- cbind(t.surv, e.surv, info)
+info <- Clinical.info
+colnames(info) <-  c("t.surv","e.surv", 
+                     "Smoker.current.never.former",
+                     "Gender.Male.Female" ,         
+                     "Diagnosis.Age"  ,
+                     "Stage" ,
+                     "Subtype"         )
 
 pid <-  substr(colnames(data), 1, 6)
 comxx <- intersect(row.names(info), pid)
@@ -1461,40 +1394,29 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+outdir <- "./Fig3/"
 
 myinf1 <- paste0(outdir,"/PACEG_scores_CPRIT-MIRA.txt")
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/Clinical_Sample_info/CohortC_CPRIT-MIRA_clinical_info.csv"
+myinf2 <- "./data/MDAMPLC.rda"
 
 myFig1 <- paste0(outdir,"/PACEG_scores_forest_CPRIT-MIRA.pdf")
 myFig2 <- paste0(outdir,"/PACEG_scores_CIbar_CPRIT-MIRA.pdf")
 
 # a) load data -----------------------------------------------------------------
 data <- read.table(myinf1, sep="\t", header=T, row.names=1, quote="")
-info <- read.csv(myinf2, header=T, row.names=1)
+info <- Clinical.info
+colnames(info) <-  c("t.surv","e.surv", 
+                     "Smoker.current.never.former",
+                     "Gender.Male.Female" ,         
+                     "Diagnosis.Age"  ,
+                     "Stage" ,
+                     "Subtype"         )
 
 
 comxx <- intersect(row.names(data), row.names(info))
 info <- info[comxx,]
 data <- data[comxx,]
 
-# survival info
-e.surv <- replace(info$Relapse, 17, "Y") 
-# 17 is continuous but other column show it has relapse
-t.surv <- info$PFS..Date.of.the.biopsy.to.confirm.relapse.Date.of.surgery..months
-
-# To be consistent with cohortD, the event is Recurrence.or.death
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "Y")
-info[se,]
-e.surv[se] <- info$Deceased..Y.N.[se]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "N")
-info[se,]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-e.surv <- ifelse(e.surv == "Y",1,0)
-info <- cbind(t.surv, e.surv, info)
 
 mydata <- cbind(data, info)
 mydata <- mydata[mydata[, "t.surv"]>0,]
@@ -1606,3 +1528,431 @@ p1 <-  p.data %>%
 pdf(myFig2, width = 8, height = 8)
 print(p1)
 dev.off()
+
+
+# [3] Other Collected_Gene_Signatures   ########################################
+
+# [3.I] LUAD Training ==========================================================
+library(survival)
+# a) Load data LUAD ------------------------------------------------------------
+rm(list = ls())
+outdir <- "./Fig3/Other_signatures"
+myinf0 <- paste0(outdir,"/Collected_Gene_Signatures.csv")
+myinf1 <- "~/Mydata/TCGA_LUAD/LUAD_RNAseqv2_ALL_Symbol.rda"
+myinf2 <- "~/Mydata/TCGA_LUAD/LUAD_Clincial_info.txt"
+
+myoutf1 <- paste0(outdir,"/Collected_Gene_Signatures_LUAD_training_summary.csv")
+myoutf2 <- paste0(outdir,"/Collected_Gene_Signatures_coefficients.csv")
+
+
+sig.sum <- read.csv(myinf0)
+sig.name <- unique(sig.sum$signature)
+
+
+load(myinf1)
+rna <- mydata
+rm(mydata)
+# keep primary samples
+xx <- as.numeric(substr(colnames(rna), 14, 15))
+table(xx)
+# xx
+# 1   2  11 
+# 515   2  59 
+# 01 Primary Solid Tumor
+# 02 Recurrent Solid Tumor
+# 11 Solid Tissue Normal
+
+se <- which(xx==1)		## Primary Solid Tumor
+length(se) # 515 samples
+rna <- rna[,se]
+dim(rna) # 20501   515
+colnames(rna) <- substr(colnames(rna), 1, 12)
+
+# info 
+info <- read.table(myinf2, sep="\t", header=T, row.names=1, quote="",fill = TRUE)
+se <- c("vital_status", "days_to_death", "days_to_last_followup")
+info <- info[,se]
+event <- ifelse(info$vital_status=="dead", 1, 0)
+xx <- info[, "days_to_death"] 
+time <-  ifelse(!is.na(xx), xx, info[, "days_to_last_followup"])
+
+info <- data.frame(row.names = row.names(info),
+                   e.surv= event,
+                   t.surv = as.numeric(time))
+
+comxx <- intersect(rownames(info) ,colnames(rna))
+rna <- rna[,comxx]
+info <- info[comxx,]
+
+
+rna <- log2(rna+1)
+
+all(rownames(info) == colnames(rna))
+all(rownames(info) == rownames(t(rna))) # T
+rownames(rna) <- gsub(rownames(rna), pattern = "-",replacement = ".")
+
+# b) traing in LUAD ------------------------------------------------------------
+Training_sum <- data.frame(row.names = sig.name, 
+                           "Signature" = sig.name)
+sig_coeff <- data.frame()
+
+for ( iii in sig.name) {
+  se <- which(sig.sum$signature == iii)
+  mysig <- sig.sum[se,]
+  mygene <- gsub(mysig$Gene, pattern = "-",replacement = ".",fixed = T)
+  
+  se <- which(rownames(rna) %in% mygene)
+  cat("\n", iii, "\t",length(se), "/",  length(mygene))
+  Training_sum[iii,"No.Gene"] <- paste0(length(se), "/",  length(mygene))
+  
+  if (length(se) > 2) {
+    coxData <- cbind(info,t(rna[se,]))
+    mygene <- rownames(rna)[se]
+    fmla <- as.formula(paste("Surv(t.surv, e.surv) ~", 
+                             paste(mygene,collapse= "+")))
+    
+    coxModel <- coxph(formula = fmla,
+                      data    = coxData)
+    mycox <- summary(coxModel)
+    Training_sum[iii, "P-value_logtest" ] <- mycox$logtest[3]
+    Training_sum[iii, "P-value_sctest"  ] <- mycox$sctest[3]
+    Training_sum[iii, "P-value_waldtest"] <- mycox$waldtest[3]
+    Training_sum[iii,"C-index" ] <- round(mycox$concordance[1],3)
+    mytmp <- data.frame(Gene = gsub(rownames(mycox$coefficients), 
+                                    pattern = ".",replacement = "-",fixed = T),
+                        beta = mycox$coefficients[,1],
+                        signature = rep(iii,nrow(mycox$coefficients)))
+    sig_coeff <- rbind(sig_coeff,mytmp)
+  } else next
+}
+
+write.csv(file = myoutf1,x = Training_sum,quote = F,row.names = F)
+write.csv(file = myoutf2,x = sig_coeff,quote = F,row.names = F)
+
+
+# [3.2] Applied to Multiregional RNA-seq =======================================
+rm(list=ls())
+library(survival)
+library(forestplot)
+library(ggplot2)
+outdir <- "./Fig3/Other_signatures"
+
+myinf0 <- paste0(outdir,"/Collected_Gene_Signatures_coefficients.csv")
+myoutf0 <- paste0(outdir,"/Collected_Gene_Signatures_summary.csv")
+sig.sum <- read.csv(myinf0)
+
+sig.name <- unique(sig.sum$signature)
+
+myres <- data.frame("HR","P-Value","C-index","cohort")
+for ( iii in sig.name) {
+  se <- which(sig.sum$signature == iii)
+  mysig <- sig.sum[se,]
+  
+  # [3.2.1] TRACERx ============================================================
+  # A) Score -------------------------------------------------------------------
+  myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+  myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+  
+  myoutf1 <- paste0(outdir,"/Collected_Gene_Signatures_", iii ,"_scores_TRACERx.txt")
+  # a) expression and signature  -----------------------------------------------
+  data <- read.table(myinf1, sep="\t", header=T, check.names=F)
+  
+  # confirm the same order of gene
+  row.names(mysig) <- mysig$Gene
+  comxx <- intersect(row.names(data), row.names(mysig))
+  data <- data[comxx,]
+  mysig <- mysig[comxx,]
+  my_gene_number <- length(comxx)
+  all(rownames(data) == mysig$Gene) # T
+  
+  
+  mysig_coefficient <- mysig$beta
+  names(mysig_coefficient) <- mysig$Gene
+  # b) log transform -----------------------------------------------------------
+  
+  data <- log2(data+1)
+  # c) survival info -----------------------------------------------------------
+  info <- read.csv(myinf2, header=T, row.names=1)
+  
+  t.surv <- info$ORIGINAL.publsihed.Time_to_recurrence_or_death..months.
+  e.surv <- info$Recurrence.or.death
+  info <- cbind(t.surv, e.surv, info)
+  
+  pid <- substr(colnames(data), 17, 25)
+  comxx <- intersect(row.names(info), pid)
+  info <- info[comxx,]
+  se <- which(pid %in% comxx)
+  # patient ID of expression data
+  pid <- pid[se]
+  data <- data[,se]
+  # unique patient ID of survival data
+  mypat <- row.names(info)
+  
+  dim(data) 
+  
+  # d) M1 Trasformed gene expression score -------------------------------------
+  tmp <- matrix(0, nrow(data), length(mypat))
+  row.names(tmp) <- row.names(data)
+  all(row.names(tmp)  == names(mysig_coefficient)) # T
+  colnames(tmp) <- mypat
+  dat.rev <- dat.adj <- dat.avg <- dat.max <- dat.min <- tmp
+  # patient gene expression 
+  for(k in 1:length(mypat)){
+    se <- which(pid==mypat[k])
+    if(length(se)==0){
+      mys[k,] <- NA
+      next
+    }
+    tmp <- data[, se, drop=F]
+    dat.max[,k] <- apply(tmp, 1, max)			
+    dat.min[,k] <- apply(tmp, 1, min)			
+    dat.avg[,k] <- apply(tmp, 1, mean)		
+    dat.adj[,k] <- ifelse(test = mysig_coefficient > 0, 
+                          yes = dat.max[,k],  no = dat.min[,k])
+    dat.rev[,k] <- ifelse(test = mysig_coefficient < 0, 
+                          yes = dat.max[,k],  no = dat.min[,k])
+  }
+  
+  # patient score 
+  res.m1 <- data.frame(m1.s.avg=t(dat.avg) %*% mysig_coefficient, 
+                       m1.s.max=t(dat.max) %*% mysig_coefficient, 
+                       m1.s.min=t(dat.min) %*% mysig_coefficient,
+                       m1.s.adj=t(dat.adj) %*% mysig_coefficient,
+                       m1.s.rev=t(dat.rev) %*% mysig_coefficient )
+  
+  # e) M2 Region Specific Score ------------------------------------------------
+  # region score
+  all(row.names(data)  == names(mysig_coefficient)) # T
+  signature <- t(data) %*% mysig$beta
+  signature <- as.data.frame(signature)
+  
+  # patient score
+  mys <- rep(0, length(mypat))
+  names(mys) <-  mypat
+  mys.max <- mys.min <- mys.avg <- mys
+  
+  for(k in 1:length(mypat)) {
+    cat("\r", k)
+    se <- which(pid==mypat[k])
+    if(length(se)==0){
+      mys[k,] <- NA
+      next
+    }
+    mys.max[k]  <- max(signature[se, ])			
+    mys.min[k]  <- min(signature[se, ])			 
+    mys.avg[k]  <- mean(signature[se, ])			
+  }
+  
+  res.m2 <- data.frame(m2.s.avg=mys.avg, 
+                       m2.s.max=mys.max, 
+                       m2.s.min=mys.min)
+  
+  all(rownames(res.m1) == rownames(res.m2)) #T
+  res <- cbind(res.m1,res.m2)
+  write.table(res, myoutf1, sep="\t", quote=F)
+  # B) Survival ----------------------------------------------------------------
+  myinf1 <- paste0(outdir,"/Collected_Gene_Signatures_", 
+                   iii ,"_scores_TRACERx.txt")
+  
+  # a) load data ---------------------------------------------------------------
+  rm(data)
+  data <- read.table(myinf1, sep="\t", header=T, row.names=1, quote="")
+  
+  
+  comxx <- intersect(row.names(data), row.names(info))
+  info <- info[comxx,]
+  data <- data[comxx,]
+  
+  mydata <- cbind(data, info)
+  mydata <- mydata[mydata[, "t.surv"]>0,]
+  
+  # b) survival analysis -------------------------------------------------------
+  
+  p.data <- matrix(0, ncol(data), 5)
+  rownames(p.data) <- colnames(data)
+  colnames(p.data) <- c("HR","P-Value","C-index", "lower.95", "upper.95")
+  p.data <- as.data.frame(p.data)
+  
+  
+  for(k in 1:nrow(p.data)){
+    cat("\r", k)
+    # max
+    formula <- as.formula(paste0( "Surv(t.surv, e.surv) ~ ",
+                                  rownames(p.data)[k]))
+    mycox <- coxph(formula,mydata) 
+    mycox <- summary(mycox)
+    tmp <- mycox$conf.int
+    p.data$HR[k] <- round(tmp[1],3)
+    p.data$lower.95[k] <- tmp[3]
+    p.data$upper.95[k] <- tmp[4]
+    p.data$`P-Value`[k] <- round(mycox$coefficients[5],3)
+    p.data$`C-index`[k] <- round(mycox$concordance[1],3)
+    
+  }
+  
+  mytmp <- p.data[1:3]
+  # The last row show info: signature name, cohort, signature gene number
+  mytmp[nrow(mytmp)+1,] <- c(paste0("Collected_Gene_Signatures_", iii ),
+                             "TRACERx",
+                             paste0(my_gene_number,"/", nrow(mysig) )
+  )
+  myres <- cbind(mytmp,myres)
+  
+  
+  # [3.2.2] CPRIT-MIRA =========================================================
+  
+  # A) Score -------------------------------------------------------------------
+  rm(data,info,p.data,mytmp,mydata,myinf1,myinf2, myoutf1)
+  myinf1 <- "./data/MDAMPLC.rda"
+  
+  myoutf1 <- paste0(outdir,"/Collected_Gene_Signatures_", 
+                    iii ,"_scores_CPRIT-MIRA.txt")
+  # a) expression and signature  -----------------------------------------------
+  
+  load(myinf1)
+  data <- RNAseq
+  
+  # confirm the same order of gene
+  row.names(mysig) <- mysig$Gene
+  comxx <- intersect(row.names(data), row.names(mysig))
+  data <- data[comxx,]
+  mysig <- mysig[comxx,]
+  my_gene_number <- length(comxx)
+  all(rownames(data) == mysig$Gene) # T
+  
+  
+  mysig_coefficient <- mysig$beta
+  names(mysig_coefficient) <- mysig$Gene
+  # b) log transform -----------------------------------------------------------
+  
+  data <- log2(data+1)
+  # c) survival info -----------------------------------------------------------
+  info <- Clinical.info
+  colnames(info) <-  c("t.surv","e.surv", 
+                       "Smoker.current.never.former",
+                       "Gender.Male.Female" ,         
+                       "Diagnosis.Age"  ,
+                       "Stage" ,
+                       "Subtype"         )
+  
+  pid <-  substr(colnames(data), 1, 6)
+  comxx <- intersect(row.names(info), pid)
+  info <- info[comxx,]
+  se <- which(pid %in% comxx)
+  # patient ID of expression data
+  pid <- pid[se]
+  data <- data[,se]
+  # unique patient ID of survival data
+  mypat <- row.names(info)
+  
+  dim(data) 
+  
+  # d) M1 Trasformed gene expression score -------------------------------------
+  tmp <- matrix(0, nrow(data), length(mypat))
+  row.names(tmp) <- row.names(data)
+  all(row.names(tmp)  == names(mysig_coefficient)) # T
+  colnames(tmp) <- mypat
+  dat.rev <- dat.adj <- dat.avg <- dat.max <- dat.min <- tmp
+  # patient gene expression 
+  for(k in 1:length(mypat)){
+    se <- which(pid==mypat[k])
+    if(length(se)==0){
+      mys[k,] <- NA
+      next
+    }
+    tmp <- data[, se, drop=F]
+    dat.max[,k] <- apply(tmp, 1, max)			
+    dat.min[,k] <- apply(tmp, 1, min)			
+    dat.avg[,k] <- apply(tmp, 1, mean)		
+    dat.adj[,k] <- ifelse(test = mysig_coefficient > 0, 
+                          yes = dat.max[,k],  no = dat.min[,k])
+    dat.rev[,k] <- ifelse(test = mysig_coefficient < 0, 
+                          yes = dat.max[,k],  no = dat.min[,k])
+  }
+  
+  # patient score 
+  res.m1 <- data.frame(m1.s.avg=t(dat.avg) %*% mysig_coefficient, 
+                       m1.s.max=t(dat.max) %*% mysig_coefficient, 
+                       m1.s.min=t(dat.min) %*% mysig_coefficient,
+                       m1.s.adj=t(dat.adj) %*% mysig_coefficient,
+                       m1.s.rev=t(dat.rev) %*% mysig_coefficient )
+  
+  # e) M2 Region Specific Score ------------------------------------------------
+  # region score
+  all(row.names(data)  == names(mysig_coefficient)) # T
+  signature <- t(data) %*% mysig$beta
+  signature <- as.data.frame(signature)
+  
+  # patient score
+  mys <- rep(0, length(mypat))
+  names(mys) <-  mypat
+  mys.max <- mys.min <- mys.avg <- mys
+  
+  for(k in 1:length(mypat)) {
+    cat("\r", k)
+    se <- which(pid==mypat[k])
+    if(length(se)==0){
+      mys[k,] <- NA
+      next
+    }
+    mys.max[k]  <- max(signature[se, ])			
+    mys.min[k]  <- min(signature[se, ])			 
+    mys.avg[k]  <- mean(signature[se, ])			
+  }
+  
+  res.m2 <- data.frame(m2.s.avg=mys.avg, 
+                       m2.s.max=mys.max, 
+                       m2.s.min=mys.min)
+  
+  all(rownames(res.m1) == rownames(res.m2)) #T
+  res <- cbind(res.m1,res.m2)
+  write.table(res, myoutf1, sep="\t", quote=F)
+  # B) mysig Survival ----------------------------------------------------------
+  
+  myinf1 <- paste0(outdir,"/Collected_Gene_Signatures_", 
+                   iii ,"_scores_CPRIT-MIRA.txt")
+  # a) load data ---------------------------------------------------------------
+  rm(data)
+  data <- read.table(myinf1, sep="\t", header=T, row.names=1, quote="")
+  
+  mydata <- cbind(data, info)
+  mydata <- mydata[mydata[, "t.surv"]>0,]
+  
+  # b) survival analysis -------------------------------------------------------
+  
+  p.data <- matrix(0, ncol(data), 5)
+  rownames(p.data) <- colnames(data)
+  colnames(p.data) <- c("HR","P-Value","C-index", "lower.95", "upper.95")
+  p.data <- as.data.frame(p.data)
+  
+  
+  for(k in 1:nrow(p.data)){
+    cat("\r", k)
+    # max
+    formula <- as.formula(paste0( "Surv(t.surv, e.surv) ~ ", 
+                                  rownames(p.data)[k]))
+    mycox <- coxph(formula,mydata) 
+    mycox <- summary(mycox)
+    tmp <- mycox$conf.int
+    p.data$HR[k] <- round(tmp[1],3)
+    p.data$lower.95[k] <- tmp[3]
+    p.data$upper.95[k] <- tmp[4]
+    p.data$`P-Value`[k] <- round(mycox$coefficients[5],3)
+    p.data$`C-index`[k] <- round(mycox$concordance[1],3)
+    
+  }
+  
+  # The C-index of each signature will be corrected manually if the HR different
+  
+  mytmp <- p.data[1:3]
+  # The last row show info: signature name, cohort, signature gene number
+  mytmp[nrow(mytmp)+1,] <- c(paste0("Collected_Gene_Signatures_", iii ),
+                             "CPRIT-MIRA",
+                             paste0(my_gene_number,"/", nrow(mysig) )
+  )
+  myres <- cbind(myres,mytmp)
+  
+}
+
+write.csv(file = myoutf0,x = myres,quote = F,row.names = T)
+

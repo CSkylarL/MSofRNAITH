@@ -1,9 +1,7 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # Fig.5
 # Author: Chao Cheng; Chenyang Li
-# TRACERx Color: "#67000d",[ "#d73027" ], "#c51b7d"
-# CPRIT-MIRA Color: "#08306b", [ "#3288bd" ], "#5e4fa2" 
-# CPRIT-MIRA  Result is not significant --> remove it
+# Note: CPRIT-MIRA is the MDAMPLC cohort
 # 12/14/2022
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # [1] TRACERx ##################################################################
@@ -13,18 +11,18 @@ rm(list=ls())
 library(survival)
 
 
-indir1 <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+indir1 <- "./Fig3/"
 myinf1 <- paste0(indir1,"/ORACLE_M2_Region_TRACERx.txt")
 myinf2 <- paste0(indir1,"/WTGS_M2_Region_TRACERx.txt")
 myinf3 <- paste0(indir1,"/PACEG_M2_Region_TRACERx.txt")
 
-indir2 <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig4/"
+indir2 <- "./Fig4/"
 myinf4 <- paste0(indir2,"/RNAseq_Genes_representativeImm_TRACERx.txt")
 
-myinf5 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/RNAseq_Sample_FullID.txt"
-myinf6 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+myinf5 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/RNAseq_Sample_FullID.txt"
+myinf6 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig5/"
+outdir <- "./Fig5/"
 
 myoutf1 <- paste0(outdir,"/Region_specific_scores_TRACERx.txt")
 
@@ -59,7 +57,7 @@ paceg <- paceg[comxx,1]
 wtgs <- wtgs[comxx,1]
 imm <- imm[comxx,]
 
-data <- cbind(imm, oracle, paceg, wtgs)
+data <- cbind(imm, oracle,  wtgs, paceg)
 
 # f) map ID --------------------------------------------------------------------
 info <- read.table(myinf5, sep="\t", header=T, 
@@ -130,13 +128,16 @@ score[1:3,]
 # j) export --------------------------------------------------------------------
 write.table(score, myoutf1, sep="\t", quote=F)
 
+
+
 # [1.2] Correlation of Region Specific Risk ====================================
 rm(list=ls())
+library(dplyr)
 
 library(ComplexHeatmap)
 library(circlize)
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig5/"
+outdir <- "./Fig5/"
 
 myinf1 <- paste0(outdir,"/Region_specific_scores_TRACERx.txt")
 myFig1 <- paste0(outdir,"/Region_risk_scores_TRACERx.pdf")
@@ -144,43 +145,104 @@ myFig2 <- paste0(outdir,"/Correlation_TRACERx.pdf")
 
 
 
-# a) choose samples with multiple regions (>=5) --------------------------------
+# a) choose samples with multiple regions (>=3) --------------------------------
 data <- read.table(myinf1, sep="\t", header=T, stringsAsFactors=F, 
-                  quote="", comment.char="")
-
-
-# /Region_risk_scores_TRACERx_median-11.pdf: Normalize to [-1,1]
-# data <- apply(data, 2, function(x) (x-median(x))/(max(x)-min(x)))
-# Region_risk_scores_TRACERx_scale.pdf: [column-mean]/sd
-# data <- scale(data)
-# select regions >=3 use the below codes
-# Heatmap(as.matrix(data),  cluster_rows = F, 
-# heatmap_legend_param = list(title = "Risk Score"), 
-# cluster_columns = F)
-
+                   quote="", comment.char="")
+data <- data[order(rownames(data),decreasing = F),]
+data <- apply(data, 2, function(x) (x-median(x))/(max(x)-min(x)))
 tag <- substr(row.names(data), 1, 8)
 xx <- table(tag)
-mul.sam  <- names(xx)[xx>=5]
+mul.sam  <- names(xx)[xx>=3]
 
 se <- which(tag %in% mul.sam)
 
 data <- data[se, ]
 data <- round(data, 4)
+
+# b) heatmap of risk score  ----------------------------------------------------
+rowAnn <- data.frame(
+  row.names = rownames(data),
+  patient = rownames(data) %>% 
+    strsplit("_") %>% 
+    lapply("[[", 1) %>% 
+    unlist() ,
+  region = rownames(data) %>% 
+    strsplit("_") %>% 
+    lapply("[[", 2) %>% 
+    unlist() 
+)
+
+rowAnn$pa_col <- ifelse (test = as.numeric(as.factor(rowAnn$patient)) %% 2 == 1,
+                         yes = "#9970ab",no = "#5aae61")
+cellAnn <- cbind(rowAnn,data) %>% 
+  group_by(patient) %>% 
+  mutate(NavB_rank =rank(-NavB ,ties.method = "min"),
+         MemB_rank =rank(-MemB ,ties.method = "min"),
+         CD8T_rank =rank(-CD8T ,ties.method = "min"),
+         CD4T_rank =rank(-CD4T ,ties.method = "min"),
+         Monocyte_rank =rank(-Monocyte ,ties.method = "min"),
+         oracle_rank =rank(-oracle ,ties.method = "min"),
+         wtgs_rank =rank(-wtgs ,ties.method = "min"),
+         paceg_rank =rank(-paceg ,ties.method = "min"),
+         
+  ) %>%
+  ungroup() %>%
+  select(NavB_rank, MemB_rank, CD8T_rank, CD4T_rank,
+         Monocyte_rank, oracle_rank, wtgs_rank, paceg_rank) %>%
+  data.frame()
+
+colnames(data)
 colnames(data) <- c("Naive B", "Memory B", "CD8+ T", "CD4+ T", 
                     "Monocyte","ORACLE", "WTGS", "PACEG")
-# b) heatmap of risk score  ----------------------------------------------------
-col_fun <- colorRamp2(c(0.5, 2.5), c("white", "#2171b5"))
-p1 <- Heatmap(as.matrix(data),  cluster_rows = F, 
-                heatmap_legend_param = list(title = "Risk Score", 
-                                            at = c(0,2,4,6,8)),
-                cluster_columns = F,col = col_fun,
-              column_title_gp = gpar(fontsize = 15),
-              width = ncol(data)*unit(10, "mm"), 
-              height = nrow(data)*unit(5, "mm"))
+
+p1 <-  Heatmap(as.matrix(data),  cluster_rows = F, 
+               heatmap_legend_param = list(title = "Risk Score"), 
+               cluster_columns = F,
+               col = colorRamp2(c(-1, 0, 1), c("blue", "white", "red")),
+               cell_fun = function(j, i, x, y, w, h, fill) {
+                 
+                 if(cellAnn[i, j] == 1) {
+                   gb = textGrob("*")
+                   gb_w = convertWidth(grobWidth(gb), "mm")
+                   gb_h = convertHeight(grobHeight(gb), "mm")
+                   grid.text("*", x, y - gb_h*0.6 + gb_w*0.4,
+                             gp = gpar(fontsize = 15))
+                 } else if(cellAnn[i, j] == 2) {
+                   gb = textGrob("+")
+                   gb_w = convertWidth(grobWidth(gb), "mm")
+                   gb_h = convertHeight(grobHeight(gb), "mm")
+                   grid.text("+", x, y - gb_h*0.2 + gb_w*0.4,
+                             gp = gpar(fontsize = 12))
+                 }
+               },
+               border_gp = gpar(col = "black", lty = 1),
+               rect_gp = gpar(col = "white", lwd = 0.5),
+               row_split = rowAnn$patient,
+               left_annotation = 
+                 rowAnnotation(
+                   Patient = anno_block(gp = 
+                                          gpar(fill = rep(c("#1f78b480", 
+                                                            "#33a02c80"),4)),
+                                        labels = unique(rowAnn$patient), 
+                                        labels_gp = gpar(col = "white", 
+                                                         fontsize = 6))),
+               row_title=NULL,
+               right_annotation = 
+                 rowAnnotation(
+                   Region= anno_text(rowAnn$region,
+                                     just = "center", 
+                                     location = unit(0.5, "npc"), 
+                                     show_name = F)),
+               show_row_names = F,
+               
+               row_gap = unit(1, "mm"),
+               column_title_gp = gpar(fontsize = 15),
+               width = ncol(data)*unit(10, "mm"),
+               height = nrow(data)*unit(4, "mm"))
 
 pdf(myFig1,
-    width = 8,  
-    height = 12)
+    width = 6,  
+    height = 20)
 print(p1)
 dev.off()
 # b) heatmap of correlation  ----------------------------------------------------
@@ -190,18 +252,139 @@ idx <- c( "WTGS", "PACEG","ORACLE","Naive B", "Memory B", "CD8+ T", "CD4+ T",
           "Monocyte")
 cor.all <- cor.all[idx,idx]
 
-col_fun <- colorRamp2(c(-1, 0, 1), c("#4575b4", "white", "#d73027"))
 p2 <- Heatmap(cor.all, name = "PCC", show_column_names = T,
-              show_row_names = T, cluster_rows = F,cluster_columns = F,
+              col = colorRamp2(c(-1, 0, 1), c("blue", "white", "red")),
+              border_gp = gpar(col = "black", lty = 1),
+              show_row_names = T, cluster_rows = T,cluster_columns = T,
+              column_names_rot = 60,
               column_title_gp = gpar(fontsize = 15),
               width = ncol(cor.all)*unit(10, "mm"), 
-              height = nrow(cor.all)*unit(10, "mm"),
-              col = col_fun)
+              height = nrow(cor.all)*unit(10, "mm"))
 
 pdf(myFig2,
     width = 8,  
     height = 8)
 print(p2)
+dev.off()
+
+# [1.3] Select patients to show in main figures ================================
+
+rm(list=ls())
+library(dplyr)
+
+library(ComplexHeatmap)
+library(circlize)
+
+outdir <- "./Fig5/"
+
+myinf1 <- paste0(outdir,"/Region_specific_scores_TRACERx.txt")
+myFig1 <- paste0(outdir,"/Region_risk_scores_TRACERx_select.pdf")
+
+
+
+# a) select patients  ----------------------------------------------------------
+data <- read.table(myinf1, sep="\t", header=T, stringsAsFactors=F, 
+                   quote="", comment.char="")
+data <- data[order(rownames(data),decreasing = F),]
+data <- apply(data, 2, function(x) (x-median(x))/(max(x)-min(x)))
+tag <- substr(row.names(data), 1, 8)
+xx <- table(tag)
+
+# the patient are selected 
+# because their highest risk scores are 
+# from the same region using different signatures 
+sel.sam  <- c("CRUK0005", "CRUK0017", "CRUK0018", "CRUK0035","CRUK0050", 
+              "CRUK0052", "CRUK0084", "CRUK0086", "CRUK0094", "CRUK0098")
+
+se <- which(tag %in% sel.sam)
+
+data <- data[se, ]
+data <- round(data, 4)
+
+# b) heatmap of risk score  ----------------------------------------------------
+rowAnn <- data.frame(
+  row.names = rownames(data),
+  patient = rownames(data) %>% 
+    strsplit("_") %>% 
+    lapply("[[", 1) %>% 
+    unlist() ,
+  region = rownames(data) %>% 
+    strsplit("_") %>% 
+    lapply("[[", 2) %>% 
+    unlist() 
+)
+
+rowAnn$pa_col <- ifelse (test = as.numeric(as.factor(rowAnn$patient)) %% 2 == 1,
+                         yes = "#9970ab",no = "#5aae61")
+cellAnn <- cbind(rowAnn,data) %>% 
+  group_by(patient) %>% 
+  mutate(NavB_rank =rank(-NavB ,ties.method = "min"),
+         MemB_rank =rank(-MemB ,ties.method = "min"),
+         CD8T_rank =rank(-CD8T ,ties.method = "min"),
+         CD4T_rank =rank(-CD4T ,ties.method = "min"),
+         Monocyte_rank =rank(-Monocyte ,ties.method = "min"),
+         oracle_rank =rank(-oracle ,ties.method = "min"),
+         wtgs_rank =rank(-wtgs ,ties.method = "min"),
+         paceg_rank =rank(-paceg ,ties.method = "min"),
+         
+  ) %>%
+  ungroup() %>%
+  select(NavB_rank, MemB_rank, CD8T_rank, CD4T_rank,
+         Monocyte_rank, oracle_rank, wtgs_rank, paceg_rank) %>%
+  data.frame()
+
+colnames(data)
+colnames(data) <- c("Naive B", "Memory B", "CD8+ T", "CD4+ T", 
+                    "Monocyte","ORACLE", "WTGS", "PACEG")
+p1 <-  Heatmap(as.matrix(data),  cluster_rows = F, 
+               heatmap_legend_param = list(title = "Risk Score"), 
+               cluster_columns = F,
+               col = colorRamp2(c(-1, 0, 1), c("blue", "white", "red")),
+               cell_fun = function(j, i, x, y, w, h, fill) {
+                 
+                 if(cellAnn[i, j] == 1) {
+                   gb = textGrob("*")
+                   gb_w = convertWidth(grobWidth(gb), "mm")
+                   gb_h = convertHeight(grobHeight(gb), "mm")
+                   grid.text("*", x, y - gb_h*0.6 + gb_w*0.4,
+                             gp = gpar(fontsize = 15))
+                 } else if(cellAnn[i, j] == 2) {
+                   gb = textGrob("+")
+                   gb_w = convertWidth(grobWidth(gb), "mm")
+                   gb_h = convertHeight(grobHeight(gb), "mm")
+                   grid.text("+", x, y - gb_h*0.2 + gb_w*0.4,
+                             gp = gpar(fontsize = 12))
+                 }
+               },
+               border_gp = gpar(col = "black", lty = 1),
+               rect_gp = gpar(col = "white", lwd = 0.5),
+               row_split = rowAnn$patient,
+               left_annotation = 
+                 rowAnnotation(
+                   Patient = anno_block(gp = 
+                                          gpar(fill = rep(c("#1f78b480", 
+                                                            "#33a02c80"),4)),
+                                        labels = unique(rowAnn$patient), 
+                                        labels_gp = gpar(col = "white", 
+                                                         fontsize = 7))),
+               row_title=NULL,
+               right_annotation = 
+                 rowAnnotation(
+                   Region= anno_text(rowAnn$region,
+                                     just = "center", 
+                                     location = unit(0.5, "npc"), 
+                                     show_name = F)),
+               show_row_names = F,
+               
+               row_gap = unit(1, "mm"),
+               column_title_gp = gpar(fontsize = 15),
+               width = ncol(data)*unit(10, "mm"),
+               height = nrow(data)*unit(5, "mm"))
+
+pdf(myFig1,
+    width = 6,  
+    height = 10)
+print(p1)
 dev.off()
 
 # [2] CPRIT-MIRA ##################################################################
@@ -211,17 +394,17 @@ rm(list=ls())
 library(survival)
 
 
-indir1 <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig3/"
+indir1 <- "./Fig3/"
 myinf1 <- paste0(indir1,"/ORACLE_M2_Region_CPRIT-MIRA.txt")
 myinf2 <- paste0(indir1,"/WTGS_M2_Region_CPRIT-MIRA.txt")
 myinf3 <- paste0(indir1,"/PACEG_M2_Region_CPRIT-MIRA.txt")
 
-indir2 <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig4/"
+indir2 <- "./Fig4/"
 myinf4 <- paste0(indir2,"/RNAseq_Genes_representativeImm_CPRIT-MIRA.txt")
 
-myinf5 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/Clinical_Sample_info/CohortC_CPRIT-MIRA_clinical_info.csv"
+myinf5 <-"./data/MDAMPLC.rda"
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig5/"
+outdir <- "./Fig5/"
 
 myoutf1 <- paste0(outdir,"/Region_specific_scores_CPRIT-MIRA.txt")
 
@@ -256,7 +439,7 @@ paceg <- paceg[comxx,1]
 wtgs <- wtgs[comxx,1]
 imm <- imm[comxx,]
 
-data <- cbind(imm, oracle, paceg, wtgs)
+data <- cbind(imm, oracle,  wtgs, paceg)
 
 
 # f) Use max/min to construct model at the patient level -----------------------
@@ -290,24 +473,15 @@ for(k in 1:length(mypat)) {
 
 
 # g) survival info -------------------------------------------------------------
-info <- read.csv(myinf5, header=T, row.names=1)
+load(myinf5)
 
-e.surv <- replace(info$Relapse, 17, "Y") 
-# 17 is continuous but other column show it has relapse
-t.surv <- info$PFS..Date.of.the.biopsy.to.confirm.relapse.Date.of.surgery..months
-
-# To be consistent with cohortD, the event is Recurrence.or.death
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "Y")
-info[se,]
-e.surv[se] <- info$Deceased..Y.N.[se]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "N")
-info[se,]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-e.surv <- ifelse(e.surv == "Y",1,0)
-info <- cbind(t.surv, e.surv, info)
+info <- Clinical.info
+colnames(info) <-  c("t.surv","e.surv", 
+                     "Smoker.current.never.former",
+                     "Gender.Male.Female" ,         
+                     "Diagnosis.Age"  ,
+                     "Stage" ,
+                     "Subtype"         )
 
 comxx <- intersect(row.names(mydat), row.names(info))
 info <- info[comxx,]
@@ -333,24 +507,27 @@ score[1:3,]
 # j) export --------------------------------------------------------------------
 write.table(score, myoutf1, sep="\t", quote=F)
 
-# [2.2] Correlation of Region Specific Risk ====================================
+
+
+# [1.2] Display Region Specific Risk ===========================================
 rm(list=ls())
+library(dplyr)
 
 library(ComplexHeatmap)
 library(circlize)
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig5/"
+outdir <- "./Fig5/"
 
 myinf1 <- paste0(outdir,"/Region_specific_scores_CPRIT-MIRA.txt")
 myFig1 <- paste0(outdir,"/Region_risk_scores_CPRIT-MIRA.pdf")
-myFig2 <- paste0(outdir,"/Correlation_CPRIT-MIRA.pdf")
 
 
 
-# a) choose samples with multiple regions (>=3) --------------------------------
+# a) choose samples with multiple regions (>=5) --------------------------------
 data <- read.table(myinf1, sep="\t", header=T, stringsAsFactors=F, 
                    quote="", comment.char="")
-
+data <- data[order(rownames(data),decreasing = F),]
+data <- apply(data, 2, function(x) (x-median(x))/(max(x)-min(x)))
 tag <- substr(row.names(data), 1, 6)
 xx <- table(tag)
 mul.sam  <- names(xx)[xx>=3]
@@ -359,40 +536,212 @@ se <- which(tag %in% mul.sam)
 
 data <- data[se, ]
 data <- round(data, 4)
+
+# b) heatmap of risk score  ----------------------------------------------------
+rowAnn <- data.frame(
+  row.names = rownames(data),
+  patient = rownames(data) %>% 
+    strsplit("-") %>% 
+    lapply("[[", 1) %>% 
+    unlist() ,
+  region = rownames(data) %>% 
+    strsplit("-") %>% 
+    lapply("[[", 2) %>% 
+    unlist() %>%
+    gsub(pattern = "T",replacement = "R")
+)
+
+rowAnn$pa_col <- ifelse (test = as.numeric(as.factor(rowAnn$patient)) %% 2 == 1,
+                         yes = "#9970ab",no = "#5aae61")
+cellAnn <- cbind(rowAnn,data) %>% 
+  group_by(patient) %>% 
+  mutate(NavB_rank =rank(-NavB ,ties.method = "min"),
+         MemB_rank =rank(-MemB ,ties.method = "min"),
+         CD8T_rank =rank(-CD8T ,ties.method = "min"),
+         CD4T_rank =rank(-CD4T ,ties.method = "min"),
+         Monocyte_rank =rank(-Monocyte ,ties.method = "min"),
+         oracle_rank =rank(-oracle ,ties.method = "min"),
+         wtgs_rank =rank(-wtgs ,ties.method = "min"),
+         paceg_rank =rank(-paceg ,ties.method = "min"),
+         
+  ) %>%
+  ungroup() %>%
+  select(NavB_rank, MemB_rank, CD8T_rank, CD4T_rank,
+         Monocyte_rank, oracle_rank, wtgs_rank, paceg_rank) %>%
+  data.frame()
+
+colnames(data)
 colnames(data) <- c("Naive B", "Memory B", "CD8+ T", "CD4+ T", 
                     "Monocyte","ORACLE", "WTGS", "PACEG")
-# b) heatmap of risk score  ----------------------------------------------------
-col_fun <- colorRamp2(c(0.5, 2.5), c("white", "#2171b5"))
-p1 <- Heatmap(as.matrix(data),  cluster_rows = F, 
-              heatmap_legend_param = list(title = "Risk Score", 
-                                          at = c(0,2,4,6,8)),
-              cluster_columns = F,col = col_fun,
-              column_title_gp = gpar(fontsize = 15),
-              width = ncol(data)*unit(10, "mm"), 
-              height = nrow(data)*unit(5, "mm"))
+
+p1 <-  Heatmap(as.matrix(data),  cluster_rows = F, 
+               heatmap_legend_param = list(title = "Risk Score"), 
+               cluster_columns = F,
+               col = colorRamp2(c(-1, 0, 1), c("blue", "white", "red")),
+               cell_fun = function(j, i, x, y, w, h, fill) {
+                 
+                 if(cellAnn[i, j] == 1) {
+                   gb = textGrob("*")
+                   gb_w = convertWidth(grobWidth(gb), "mm")
+                   gb_h = convertHeight(grobHeight(gb), "mm")
+                   grid.text("*", x, y - gb_h*0.6 + gb_w*0.4,
+                             gp = gpar(fontsize = 15))
+                 } else if(cellAnn[i, j] == 2) {
+                   gb = textGrob("+")
+                   gb_w = convertWidth(grobWidth(gb), "mm")
+                   gb_h = convertHeight(grobHeight(gb), "mm")
+                   grid.text("+", x, y - gb_h*0.2 + gb_w*0.4,
+                             gp = gpar(fontsize = 12))
+                 }
+               },
+               border_gp = gpar(col = "black", lty = 1),
+               rect_gp = gpar(col = "white", lwd = 0.5),
+               row_split = rowAnn$patient,
+               left_annotation = 
+                 rowAnnotation(
+                   Patient = anno_block(gp = 
+                                          gpar(fill = rep(c("#1f78b480", 
+                                                            "#33a02c80"),4)),
+                                        labels = unique(rowAnn$patient), 
+                                        labels_gp = gpar(col = "white", 
+                                                         fontsize = 8))),
+               row_title=NULL,
+               right_annotation = 
+                 rowAnnotation(
+                   Region= anno_text(rowAnn$region,
+                                     just = "center", 
+                                     location = unit(0.5, "npc"), 
+                                     show_name = F)),
+               show_row_names = F,
+               
+               row_gap = unit(1, "mm"),
+               column_title_gp = gpar(fontsize = 15),
+               width = ncol(data)*unit(10, "mm"),
+               height = nrow(data)*unit(4, "mm"))
 
 pdf(myFig1,
-    width = 8,  
-    height = 12)
+    width = 6,  
+    height = 10)
 print(p1)
 dev.off()
-# b) heatmap of correlation  ----------------------------------------------------
 
-cor.all <- cor(data, method ="pearson")
-idx <- c( "WTGS", "PACEG","ORACLE","Naive B", "Memory B", "CD8+ T", "CD4+ T", 
-          "Monocyte")
-cor.all <- cor.all[idx,idx]
 
-col_fun <- colorRamp2(c(-1, 0, 1), c("#4575b4", "white", "#d73027"))
-p2 <- Heatmap(cor.all, name = "PCC", show_column_names = T,
-              show_row_names = T, cluster_rows = F,cluster_columns = F,
-              column_title_gp = gpar(fontsize = 15),
-              width = ncol(cor.all)*unit(10, "mm"), 
-              height = nrow(cor.all)*unit(10, "mm"),
-              col = col_fun)
+# [1.3] Select patients to show in main figures ================================
+rm(list=ls())
+library(dplyr)
 
-pdf(myFig2,
-    width = 8,  
-    height = 8)
-print(p2)
+library(ComplexHeatmap)
+library(circlize)
+
+outdir <- "./Fig5/"
+
+myinf1 <- paste0(outdir,"/Region_specific_scores_CPRIT-MIRA.txt")
+myFig1 <- paste0(outdir,"/Region_risk_scores_CPRIT-MIRA_select.pdf")
+
+
+
+# a) choose samples with multiple regions (>=5) --------------------------------
+data <- read.table(myinf1, sep="\t", header=T, stringsAsFactors=F, 
+                   quote="", comment.char="")
+data <- data[order(rownames(data),decreasing = F),]
+data <- apply(data, 2, function(x) (x-median(x))/(max(x)-min(x)))
+tag <- substr(row.names(data), 1, 6)
+xx <- table(tag)
+
+# the patient are selected 
+# because their highest risk scores are 
+# from the same region using different signatures 
+sel.sam  <- c("213109", "244136", "250854", "841808", "886403")
+
+se <- which(tag %in% sel.sam)
+
+data <- data[se, ]
+data <- round(data, 4)
+
+# b) heatmap of risk score  ----------------------------------------------------
+rowAnn <- data.frame(
+  row.names = rownames(data),
+  patient = rownames(data) %>% 
+    strsplit("-") %>% 
+    lapply("[[", 1) %>% 
+    unlist() ,
+  region = rownames(data) %>% 
+    strsplit("-") %>% 
+    lapply("[[", 2) %>% 
+    unlist() %>%
+    gsub(pattern = "T",replacement = "R")
+)
+
+rowAnn$pa_col <- ifelse (test = as.numeric(as.factor(rowAnn$patient)) %% 2 == 1,
+                         yes = "#9970ab",no = "#5aae61")
+cellAnn <- cbind(rowAnn,data) %>% 
+  group_by(patient) %>% 
+  mutate(NavB_rank =rank(-NavB ,ties.method = "min"),
+         MemB_rank =rank(-MemB ,ties.method = "min"),
+         CD8T_rank =rank(-CD8T ,ties.method = "min"),
+         CD4T_rank =rank(-CD4T ,ties.method = "min"),
+         Monocyte_rank =rank(-Monocyte ,ties.method = "min"),
+         oracle_rank =rank(-oracle ,ties.method = "min"),
+         wtgs_rank =rank(-wtgs ,ties.method = "min"),
+         paceg_rank =rank(-paceg ,ties.method = "min"),
+         
+  ) %>%
+  ungroup() %>%
+  select(NavB_rank, MemB_rank, CD8T_rank, CD4T_rank,
+         Monocyte_rank, oracle_rank, wtgs_rank, paceg_rank) %>%
+  data.frame()
+
+colnames(data)
+colnames(data) <- c("Naive B", "Memory B", "CD8+ T", "CD4+ T", 
+                    "Monocyte","ORACLE", "WTGS", "PACEG")
+
+p1 <-  Heatmap(as.matrix(data),  cluster_rows = F, 
+               heatmap_legend_param = list(title = "Risk Score"), 
+               cluster_columns = F,
+               col = colorRamp2(c(-1, 0, 1), c("blue", "white", "red")),
+               cell_fun = function(j, i, x, y, w, h, fill) {
+                 
+                 if(cellAnn[i, j] == 1) {
+                   gb = textGrob("*")
+                   gb_w = convertWidth(grobWidth(gb), "mm")
+                   gb_h = convertHeight(grobHeight(gb), "mm")
+                   grid.text("*", x, y - gb_h*0.6 + gb_w*0.4,
+                             gp = gpar(fontsize = 15))
+                 } else if(cellAnn[i, j] == 2) {
+                   gb = textGrob("+")
+                   gb_w = convertWidth(grobWidth(gb), "mm")
+                   gb_h = convertHeight(grobHeight(gb), "mm")
+                   grid.text("+", x, y - gb_h*0.2 + gb_w*0.4,
+                             gp = gpar(fontsize = 12))
+                 }
+               },
+               border_gp = gpar(col = "black", lty = 1),
+               rect_gp = gpar(col = "white", lwd = 0.5),
+               row_split = rowAnn$patient,
+               left_annotation = 
+                 rowAnnotation(
+                   Patient = anno_block(gp = 
+                                          gpar(fill = rep(c("#1f78b480", 
+                                                            "#33a02c80"),4)),
+                                        labels = unique(rowAnn$patient), 
+                                        labels_gp = gpar(col = "white", 
+                                                         fontsize = 8))),
+               row_title=NULL,
+               right_annotation = 
+                 rowAnnotation(
+                   Region= anno_text(rowAnn$region,
+                                     just = "center", 
+                                     location = unit(0.5, "npc"), 
+                                     show_name = F)),
+               show_row_names = F,
+               
+               row_gap = unit(1, "mm"),
+               column_title_gp = gpar(fontsize = 15),
+               width = ncol(data)*unit(10, "mm"),
+               height = nrow(data)*unit(4, "mm"))
+
+pdf(myFig1,
+    width = 6,  
+    height = 6)
+print(p1)
 dev.off()

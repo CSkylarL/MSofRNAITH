@@ -1,18 +1,20 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # Fig.1
 # Author: Chao Cheng; Chenyang Li
+# Note: CPRIT-MIRA is the MDAMPLC cohort
 # 12/12/2022
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # [1] TRACERx ##################################################################
 # [1.1] Pairwise Similarity of Expression data =================================
 rm(list=ls())
-myinf0 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/RNAseq_Sample_FullID.txt"
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf0 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/RNAseq_Sample_FullID.txt"
+myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig1/"
+outdir <- "./Fig1/"
 myoutf1 <- paste0(outdir,"/Fig1_pairwise_distance_TRACERx.rda")
 
-info <- read.table(myinf0, sep="\t", header=T, stringsAsFactors=F, quote="", comment.char="")
+info <- read.table(myinf0, sep="\t", header=T, stringsAsFactors=F, 
+                   quote="", comment.char="")
 
 # a) calculate similarity ------------------------------------------------------
 data <- read.table(myinf1, sep="\t", header=T, row.names=1, check.names=F)
@@ -72,7 +74,7 @@ save(exp.mat, file=myoutf1)
 rm(list=ls())
 library(ggplot2)
 library(dplyr)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig1/"
+outdir <- "./Fig1/"
 myinf1 <- paste0(outdir,"/Fig1_pairwise_distance_TRACERx.rda")
 myFig1 <- paste0(outdir,"/Fig1_RNA-ITH_distribution_TRACERx.pdf")
 
@@ -132,15 +134,18 @@ p <- ggplot(p.data, aes(x = Feature, y = Value, fill = Feature)) +
         legend.direction= "vertical",
         panel.grid=element_blank(),
         legend.key.width = unit(0.5,"cm"),
-        legend.title = element_text(face="bold", color="black",family = "serif", size=10),
-        legend.text= element_text(face="bold", color="black",family = "serif", size=10),
+        legend.title = element_text(face="bold", color="black",
+                                    family = "serif", size=10),
+        legend.text= element_text(face="bold", color="black",
+                                  family = "serif", size=10),
         plot.title = element_text(hjust = 0.5),
         aspect.ratio = 4.5/3,
         axis.text.x = element_text(face="bold", color="black", size=18),
         axis.text.y = element_text(face="bold", color="black", size=15),
         axis.title.x = element_text(face="bold", color="black", size=18),
         axis.title.y = element_text(face="bold",color="black", size=17)) +
-  scale_y_continuous(limits=c(-0.05,1.05), breaks=seq(0,1, 0.25),expand = c(0,0)) 
+  scale_y_continuous(limits=c(-0.05,1.05), breaks=seq(0,1, 0.25),
+                     expand = c(0,0)) 
 
 # d) Export --------------------------------------------------------------------
 
@@ -152,7 +157,7 @@ dev.off()
 rm(list=ls())
 library(ggplot2)
 library(dplyr)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig1/"
+outdir <- "./Fig1/"
 myinf1 <- paste0(outdir,"/Fig1_pairwise_distance_TRACERx.rda")
 myFig1 <- paste0(outdir,"/Fig1_RNA-ITH_patient_TRACERx.pdf")
 
@@ -232,14 +237,20 @@ p <- ggplot() +
         panel.border = element_rect(size = 1, fill = NA),
         panel.grid=element_blank(),
         legend.title = element_blank(),
-        legend.text= element_text(face="bold", color="black",family = "serif", size=12),
+        legend.text= element_text(face="bold", color="black",
+                                  family = "serif", size=12),
         plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(face="bold", color="black",family = "serif", size=10,
+        axis.text.x = element_text(face="bold", color="black",
+                                   family = "serif", size=10,
                                    angle = 60,  vjust = 1, hjust=1),
-        axis.text.y = element_text(face="bold", color="black", family = "serif",size=10),
-        axis.title.x = element_text(face="bold", color="black",family = "serif", size=12),
-        axis.title.y = element_text(face="bold",color="black",family = "serif", size=12)) +
-  scale_y_continuous(limits=c(-0.05,1.05), breaks=seq(0,1, 0.25),expand = c(0,0)) 
+        axis.text.y = element_text(face="bold", color="black", 
+                                   family = "serif",size=10),
+        axis.title.x = element_text(face="bold", color="black",
+                                    family = "serif", size=12),
+        axis.title.y = element_text(face="bold",color="black",
+                                    family = "serif", size=12)) +
+  scale_y_continuous(limits=c(-0.05,1.05), breaks=seq(0,1, 0.25),
+                     expand = c(0,0)) 
 
 pdf(myFig1, width= 10, height= 5)
 print(p)
@@ -249,16 +260,17 @@ dev.off()
 
 
 
-# [2] CPRIT-MIRA ##################################################################
+# [2] CPRIT-MIRA ###############################################################
 # [2.1] Pairwise Similarity of Expression data =================================
 rm(list=ls())
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf1 <- "./data/MDAMPLC.rda"
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig1/"
+outdir <- "./Fig1/"
 myoutf1 <- paste0(outdir,"/Fig1_pairwise_distance_CPRIT-MIRA.rda")
 
 # a) calculate similarity ------------------------------------------------------
-data <- read.table(myinf1, sep="\t", header=T, row.names=1, check.names=F)
+load(myinf1)
+data <- RNAseq
 
 xx <- apply(data>0, 1, sum)
 se <- which(xx>0)
@@ -291,24 +303,16 @@ for(i in 1:(cnum-1)) {
     res[count,3] <- xx
   }
 }
-# b)  remove normal ----------------------------------------------
-data <- res
 
-table(substr(data[,1], 11, 11) ) # N is normal
-# N   T 
-# 2918 3523 
-se <- which(substr(data[,1], 11, 11) =="T"  &  substr(data[,2], 11, 11) =="T")
-data <- data[se,]
+exp.mat <- res
 
-exp.mat <- data
-
-# c) Export Pairwise Similarity data for Fig.1 ---------------------------------
+# b) Export Pairwise Similarity data for Fig.1 ---------------------------------
 save(exp.mat, file=myoutf1)
 # [2.2] Compare RNA inter & intra heterogeneity ================================
 rm(list=ls())
 library(ggplot2)
 library(dplyr)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig1/"
+outdir <- "./Fig1/"
 myinf1 <- paste0(outdir,"/Fig1_pairwise_distance_CPRIT-MIRA.rda")
 myFig1 <- paste0(outdir,"/Fig1_RNA-ITH_distribution_CPRIT-MIRA.pdf")
 
@@ -368,8 +372,10 @@ p <- ggplot(p.data, aes(x = Feature, y = Value, fill = Feature)) +
         legend.direction= "vertical",
         panel.grid=element_blank(),
         legend.key.width = unit(0.5,"cm"),
-        legend.title = element_text(face="bold", color="black",family = "serif", size=10),
-        legend.text= element_text(face="bold", color="black",family = "serif", size=10),
+        legend.title = element_text(face="bold", color="black",
+                                    family = "serif", size=10),
+        legend.text= element_text(face="bold", color="black",
+                                  family = "serif", size=10),
         plot.title = element_text(hjust = 0.5),
         aspect.ratio = 4.5/3,
         axis.text.x = element_text(face="bold", color="black", size=18),
@@ -388,7 +394,7 @@ dev.off()
 rm(list=ls())
 library(ggplot2)
 library(dplyr)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig1/"
+outdir <- "./Fig1/"
 myinf1 <- paste0(outdir,"/Fig1_pairwise_distance_CPRIT-MIRA.rda")
 myFig1 <- paste0(outdir,"/Fig1_RNA-ITH_patient_CPRIT-MIRA.pdf")
 
@@ -459,14 +465,20 @@ p <- ggplot() +
         panel.border = element_rect(size = 1, fill = NA),
         panel.grid=element_blank(),
         legend.title = element_blank(),
-        legend.text= element_text(face="bold", color="black",family = "serif", size=12),
+        legend.text= element_text(face="bold", color="black",
+                                  family = "serif", size=12),
         plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(face="bold", color="black",family = "serif", size=10,
+        axis.text.x = element_text(face="bold", color="black",
+                                   family = "serif", size=10,
                                    angle = 60,  vjust = 1, hjust=1),
-        axis.text.y = element_text(face="bold", color="black", family = "serif",size=10),
-        axis.title.x = element_text(face="bold", color="black",family = "serif", size=12),
-        axis.title.y = element_text(face="bold",color="black",family = "serif", size=12)) +
-  scale_y_continuous(limits=c(-0.05,1.05), breaks=seq(0,1, 0.25),expand = c(0,0)) 
+        axis.text.y = element_text(face="bold", color="black", 
+                                   family = "serif",size=10),
+        axis.title.x = element_text(face="bold", color="black",
+                                    family = "serif", size=12),
+        axis.title.y = element_text(face="bold",color="black",
+                                    family = "serif", size=12)) +
+  scale_y_continuous(limits=c(-0.05,1.05), breaks=seq(0,1, 0.25),
+                     expand = c(0,0)) 
 
 pdf(myFig1, width= 10, height= 5)
 print(p)

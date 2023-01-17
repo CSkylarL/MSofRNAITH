@@ -1,9 +1,7 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # Fig.4
 # Author: Chao Cheng; Chenyang Li
-# CPRIT-MIRA  Result is not significant due to the limit sample size,
-#             But the cox regression and C-index have the same trend 
-#             --> show C-index
+# Note: CPRIT-MIRA is the MDAMPLC cohort
 # 12/15/2022
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # [1] TRACERx ##################################################################
@@ -11,12 +9,12 @@
 # [1.1] infer imm infiltration =================================================
 rm(list=ls())
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig4/"
+outdir <- "./Fig4/"
 
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
-myinf2 <- "~/ChaoCheng/Rprogram/BASE/ImmGen_representative_TILs_Profile_4BASE.txt"
+myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf2 <- "./BASE/ImmGen_representative_TILs_Profile_4BASE.txt"
 
-myfun1 <- "~/ChaoCheng/Rprogram/BASE/base5.R"
+myfun1 <- "./BASE/base5.R"
 
 myoutf1 <- paste0(outdir,"/RNAseq_Genes_representativeImm_TRACERx.txt")
 
@@ -42,7 +40,7 @@ xx <- base5(data, reg, perm=1000, myoutf1, median.norm=T)
 # [1.2] Avg/Max/Min immune cell score ==========================================
 rm(list=ls())
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig4/"
+outdir <- "./Fig4/"
 
 myinf1 <- paste0(outdir,"/RNAseq_Genes_representativeImm_TRACERx.txt")
 
@@ -82,10 +80,10 @@ library(dplyr)
 library(ggplot2)
 library(survival)
 library(forestplot)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig4/"
+outdir <- "./Fig4/"
 
 myinf1 <- paste0(outdir,"/Imm_scores_TRACERx.rda")
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
 
 myFig1 <- paste0(outdir,"/Imm_scores_forest_TRACERx.pdf")
 myFig2 <- paste0(outdir,"/Imm_scores_CIbar_TRACERx.pdf")
@@ -269,12 +267,12 @@ dev.off()
 # [2.1] infer imm infiltration =================================================
 rm(list=ls())
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig4/"
+outdir <- "./Fig4/"
 
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
-myinf2 <- "~/ChaoCheng/Rprogram/BASE/ImmGen_representative_TILs_Profile_4BASE.txt"
+myinf1 <- "./data/MDAMPLC.rda"
+myinf2 <- "./BASE/ImmGen_representative_TILs_Profile_4BASE.txt"
 
-myfun1 <- "~/ChaoCheng/Rprogram/BASE/base5.R"
+myfun1 <- "./BASE/base5.R"
 
 myoutf1 <- paste0(outdir,"/RNAseq_Genes_representativeImm_CPRIT-MIRA.txt")
 
@@ -284,10 +282,8 @@ mywt <- read.table(myinf2, sep="\t", header=T, row.names=1)
 
 source(myfun1)
 #a) Remove low exp and log transform -------------------------------------------
-# remove normal
-se <- which(substr(colnames(data), 11, 11) =="T"  )
-data <- data[,se]
-dim(data)	
+load(myinf1)
+data <- RNAseq
 
 # remove low exp
 xx <- apply(data>0, 1, sum)
@@ -307,7 +303,7 @@ xx <- base5(data, reg, perm=1000, myoutf1, median.norm=T)
 # [2.2] Avg/Max/Min immune cell score ==========================================
 rm(list=ls())
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig4/"
+outdir <- "./Fig4/"
 
 myinf1 <- paste0(outdir,"/RNAseq_Genes_representativeImm_CPRIT-MIRA.txt")
 
@@ -347,36 +343,25 @@ library(dplyr)
 library(ggplot2)
 library(survival)
 library(forestplot)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig4/"
+outdir <- "./Fig4/"
 
 myinf1 <- paste0(outdir,"/Imm_scores_CPRIT-MIRA.rda")
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortC_CPRIT-MIRA/Clinical_Sample_info/CohortC_CPRIT-MIRA_clinical_info.csv"
+myinf2 <-  "./data/MDAMPLC.rda"
 
 myFig1 <- paste0(outdir,"/Imm_scores_forest_CPRIT-MIRA.pdf")
 myFig2 <- paste0(outdir,"/Imm_scores_CIbar_CPRIT-MIRA.pdf")
 myFig3 <- paste0(outdir,"/Imm_scores_CIbarFacet_CPRIT-MIRA.pdf")
 # a) expression and survival data ----------------------------------------------
-load(myinf1)
-ls()
+load(myinf2)
 
-info <- read.csv(myinf2, header=T, row.names=1)
+info <- Clinical.info
+colnames(info) <-  c("t.surv","e.surv", 
+                     "Smoker.current.never.former",
+                     "Gender.Male.Female" ,         
+                     "Diagnosis.Age"  ,
+                     "Stage" ,
+                     "Subtype"         )
 
-e.surv <- replace(info$Relapse, 17, "Y") 
-# 17 is continuous but other column show it has relapse
-t.surv <- info$PFS..Date.of.the.biopsy.to.confirm.relapse.Date.of.surgery..months
-
-# To be consistent with cohortD, the event is Recurrence.or.death
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "Y")
-info[se,]
-e.surv[se] <- info$Deceased..Y.N.[se]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-se <- which(info$Relapse == "N" & info$Deceased..Y.N. == "N")
-info[se,]
-t.surv[se] <- info$OS..Date.of.Death.Date.of.Biopsy..months[se]
-
-e.surv <- ifelse(e.surv == "Y",1,0)
-info <- cbind(t.surv, e.surv, info)
 
 comxx <- intersect(row.names(avg.mat), row.names(info))
 info <- info[comxx,]

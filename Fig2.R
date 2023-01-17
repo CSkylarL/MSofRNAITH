@@ -7,10 +7,10 @@
 
 # [1.1] Correlation between intra and inter heterogeneity at the gene level ====
 rm(list=ls())
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/RNAseq_Sample_FullID.txt"
+myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/RNAseq_Sample_FullID.txt"
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig2/"
+outdir <- "./Fig2/"
 myoutf1 <- paste0(outdir,"/Fig2_Intra-inter_variation_genes_TRACERx.rda")
 
 data <- read.table(myinf1, sep="\t", header=T, row.names=1,  check.names=F)
@@ -82,7 +82,7 @@ save(mydata, file = myoutf1)
 rm(list=ls())
 library(ggplot2)
 library(ggpubr)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig2/"
+outdir <- "./Fig2/"
 myinf1 <- paste0(outdir,"/Fig2_Intra-inter_variation_genes_TRACERx.rda")
 myFig1 = paste0(outdir,"/ScatterPlot_Intra-Inter_gene_TRACERx.pdf")
 
@@ -140,10 +140,10 @@ rm(list=ls())
 
 library(survival)
 
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig2/"
+outdir <- "./Fig2/"
 myoutf1 <- paste0(outdir,"/Fig2_gene_coxph_TRACERx.rda")
 
 # a) Expression and survival info ----------------------------------------------
@@ -242,7 +242,8 @@ for(k in 1:nrow(max.v)){
 }
 
 res <- data.frame(hr,pval, ci)
-colnames(res) <- c("HR.max", "HR.min", "HR.avg", "PV.max", "PV.min", "PV.avg", "CI.max", "CI.min", "CI.avg")
+colnames(res) <- c("HR.max", "HR.min", "HR.avg", "PV.max", "PV.min", 
+                   "PV.avg", "CI.max", "CI.min", "CI.avg")
 uni.cox.rs <- res
 
 # e) survival analysis multivariate (gene+clincal factors) ---------------------
@@ -310,7 +311,8 @@ for(k in 1:nrow(max.v)){
 }
 
 res <- data.frame(hr,pval, ci)
-colnames(res) <- c("HR.max", "HR.min", "HR.avg", "PV.max", "PV.min", "PV.avg", "CI.max", "CI.min", "CI.avg")
+colnames(res) <- c("HR.max", "HR.min", "HR.avg", "PV.max", "PV.min", 
+                   "PV.avg", "CI.max", "CI.min", "CI.avg")
 mul.cox.rs <- res
 
 save(uni.cox.rs, mul.cox.rs, file= myoutf1)
@@ -320,7 +322,7 @@ save(uni.cox.rs, mul.cox.rs, file= myoutf1)
 rm(list = ls())
 library(ggplot2)
 library(gridExtra)
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig2/"
+outdir <- "./Fig2/"
 myinf1 <- paste0(outdir,"/Fig2_gene_coxph_TRACERx.rda")
 myFig1<- paste0(outdir,"/Volcano_unicox_TRACERx.pdf")
 
@@ -345,7 +347,18 @@ for (i in c("avg","max", "min")){
 }
 data$label <- rownames(data)
 
+# set the threhold for volcano plot
 
+data <- data %>%
+  mutate(HR.max = replace(HR.max,log2(HR.max) > 5, 2^5)) %>%
+  mutate(HR.max = replace(HR.max,log2(HR.max) < -5, 2^-5)) %>%
+  mutate(PV.max = replace(PV.max,-log10(PV.max) >= 6, 10^-6))  %>%
+  mutate(HR.avg = replace(HR.avg,log2(HR.avg) > 5, 2^5)) %>%
+  mutate(HR.avg = replace(HR.avg,log2(HR.avg) < -5, 2^-5)) %>%
+  mutate(PV.avg = replace(PV.avg,-log10(PV.avg) >= 6, 10^-6))  %>%
+  mutate(HR.min = replace(HR.min,log2(HR.min) > 5, 2^5)) %>%
+  mutate(HR.min = replace(HR.min,log2(HR.min) < -5, 2^-5)) %>%
+  mutate(PV.min = replace(PV.min,-log10(PV.min) >= 6, 10^-6))
 
 # b) mean ----------------------------------------------------------------------
 t <- table(data$Group.avg)
@@ -370,26 +383,29 @@ p1 <- ggplot() +
     panel.grid.minor=element_blank(),
     panel.grid.major=element_blank()
   ) +
-  labs(x="log2 (Harzard Ratio)",y="-log10 (P-Value)",
+  labs(x="log2 (Hazard Ratio)",y="-log10 (P-Value)",
        title="Average Expression") +
   theme(legend.position="top",
         aspect.ratio = 1/1,
         panel.border = element_rect(size = 1, fill = NA),
         legend.direction = "horizontal",
         panel.grid=element_blank(),
-        legend.title = element_text(face="bold", color="black",family = "serif", size=9),
-        legend.text= element_text(face="bold", color="black",family = "serif", size=9),
+        legend.title = element_text(face="bold", color="black",
+                                    family = "serif", size=9),
+        legend.text= element_text(face="bold", color="black",
+                                  family = "serif", size=9),
         plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(face="bold", color="black",family = "serif", size=15),
-        axis.text.y = element_text(face="bold", color="black", family = "serif",size=15),
-        axis.title.x = element_text(face="bold", color="black",family = "serif", size=18),
-        axis.title.y = element_text(face="bold",color="black",family = "serif", size=18))  +
+        axis.text.x = element_text(face="bold", color="black",
+                                   family = "serif", size=15),
+        axis.text.y = element_text(face="bold", color="black", 
+                                   family = "serif",size=15),
+        axis.title.x = element_text(face="bold", color="black",
+                                    family = "serif", size=18),
+        axis.title.y = element_text(face="bold",color="black",
+                                    family = "serif", size=18))  +
   scale_y_continuous(limits=c(0, 6), breaks=seq(0,6, 1),expand = c(0,0)) +
   scale_x_continuous(limits=c(-5, 5), breaks=seq(-4, 4,2),expand = c(0,0))
 p1
-# not show all dots
-# Warning message:
-#   Removed 3 rows containing missing values (geom_point).
 
 # c) max -----------------------------------------------------------------------
 t <- table(data$Group.max)
@@ -414,20 +430,26 @@ p2 <- ggplot() +
     panel.grid.minor=element_blank(),
     panel.grid.major=element_blank()
   ) +
-  labs(x="log2 (Harzard Ratio)",y="-log10 (P-Value)",
+  labs(x="log2 (Hazard Ratio)",y="-log10 (P-Value)",
        title="Maximal Expression") +
   theme(legend.position="top",
         aspect.ratio = 1/1,
         panel.border = element_rect(size = 1, fill = NA),
         legend.direction = "horizontal",
         panel.grid=element_blank(),
-        legend.title = element_text(face="bold", color="black",family = "serif", size=9),
-        legend.text= element_text(face="bold", color="black",family = "serif", size=9),
+        legend.title = element_text(face="bold", color="black",
+                                    family = "serif", size=9),
+        legend.text= element_text(face="bold", color="black",
+                                  family = "serif", size=9),
         plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(face="bold", color="black",family = "serif", size=15),
-        axis.text.y = element_text(face="bold", color="black", family = "serif",size=15),
-        axis.title.x = element_text(face="bold", color="black",family = "serif", size=18),
-        axis.title.y = element_text(face="bold",color="black",family = "serif", size=18))  +
+        axis.text.x = element_text(face="bold", color="black",
+                                   family = "serif", size=15),
+        axis.text.y = element_text(face="bold", color="black", 
+                                   family = "serif",size=15),
+        axis.title.x = element_text(face="bold", color="black",
+                                    family = "serif", size=18),
+        axis.title.y = element_text(face="bold",color="black",
+                                    family = "serif", size=18))  +
   scale_y_continuous(limits=c(0, 6), breaks=seq(0,6, 1),expand = c(0,0)) +
   scale_x_continuous(limits=c(-5, 5), breaks=seq(-4, 4,2),expand = c(0,0))
 p2
@@ -454,26 +476,34 @@ p3 <- ggplot() +
     panel.grid.minor=element_blank(),
     panel.grid.major=element_blank()
   ) +
-  labs(x="log2 (Harzard Ratio)",y="-log10 (P-Value)",
+  labs(x="log2 (Hazard Ratio)",y="-log10 (P-Value)",
        title="Minimal Expression") +
   theme(legend.position="top",
         aspect.ratio = 1/1,
         panel.border = element_rect(size = 1, fill = NA),
         legend.direction = "horizontal",
         panel.grid=element_blank(),
-        legend.title = element_text(face="bold", color="black",family = "serif", size=9),
-        legend.text= element_text(face="bold", color="black",family = "serif", size=9),
+        legend.title = element_text(face="bold", color="black",
+                                    family = "serif", size=9),
+        legend.text= element_text(face="bold", color="black",
+                                  family = "serif", size=9),
         plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(face="bold", color="black",family = "serif", size=15),
-        axis.text.y = element_text(face="bold", color="black", family = "serif",size=15),
-        axis.title.x = element_text(face="bold", color="black",family = "serif", size=18),
-        axis.title.y = element_text(face="bold",color="black",family = "serif", size=18))  +
-  scale_y_continuous(limits=c(0, 6), breaks=seq(0,6, 1),expand = c(0,0)) +
-  scale_x_continuous(limits=c(-5, 5), breaks=seq(-4, 4,2),expand = c(0,0))
+        axis.text.x = element_text(face="bold", color="black",
+                                   family = "serif", size=15),
+        axis.text.y = element_text(face="bold", color="black", 
+                                   family = "serif",size=15),
+        axis.title.x = element_text(face="bold", color="black",
+                                    family = "serif", size=18),
+        axis.title.y = element_text(face="bold",color="black",
+                                    family = "serif", size=18))  +
+  scale_y_continuous(limits=c(0, 6), breaks=seq(0,6, 1),
+                     expand = c(0,0)) +
+  scale_x_continuous(limits=c(-5, 5), breaks=seq(-4, 4,2),
+                     expand = c(0,0))
 p3
-# not show all dots
+# 7 NA
 # Warning message:
-# Removed 726 rows containing missing values (geom_point). 
+#   Removed 7 rows containing missing values (geom_point). 
 # export -----------------------------------------------------------------------
 pdf(myFig1, width= 18, height= 5)
 grid.arrange(p1, p2,p3, ncol=3)
@@ -488,7 +518,7 @@ library(RColorBrewer)
 library(ggvenn)
 library(gridExtra)
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig2/"
+outdir <- "./Fig2/"
 myinf1 <- paste0(outdir,"/Fig2_gene_coxph_TRACERx.rda")
 myFig1<- paste0(outdir,"/Venn_unicox_TRACERx.pdf")
 
@@ -545,7 +575,7 @@ dev.off()
 rm(list = ls())
 library(ggplot2)
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig2/"
+outdir <- "./Fig2/"
 myinf1 <- paste0(outdir,"/Fig2_gene_coxph_TRACERx.rda")
 myFig1<- paste0(outdir,"/CI_Scatter_unicox_TRACERx.pdf")
 myFig2 <- paste0(outdir,"/Pvalue_Scatter_unicox_TRACERx.pdf")
@@ -800,10 +830,10 @@ rm(list=ls())
 library(survival)
 library(survminer)
 
-myinf1 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
-myinf2 <- "/rsrch3/scratch/genomic_med/cli15/JayZhang/geneset/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
+myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
+myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
 
-outdir <- "~/ChaoCheng/F_lung_heterogeneity/FB_region_compare/FB06_MS4/Fig2/"
+outdir <- "./Fig2/"
 myFig1 <- paste0(outdir,"/KM_example_TRACERx.pdf")
 
 # a) Expression and survival info ----------------------------------------------
@@ -932,3 +962,4 @@ for ( i in 1:length(p)){
 pdf(myFig1, width = 15,height = 30)
 do.call("grid.arrange", c(plotlist = p.list1, ncol=3))
 dev.off() 
+
