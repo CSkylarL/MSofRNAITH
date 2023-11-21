@@ -871,9 +871,8 @@ data <- data[se,]
 data <- (data-apply(data, 1, mean))/apply(data, 1, sd) 
 
 # example
-mygen <- c("DDX5", "MDS2",# fusion/oncogene
-            "FCAR", "TEAD4",# other hazardous
-            "KAT6B","CEBPA") # Tumor suppressor
+mygen <- c( "MDS2",# fusion/oncogene
+            "KAT6B") # Tumor suppressor
 data <- data[mygen,]
 
 # mean/max/min of gene expression
@@ -945,6 +944,9 @@ for( k in mygen)  {
       pval.size=6,
       Exp.table = TRUE,
       title = paste0(k,"_",i),
+      conf.int = T,
+      conf.int.alpha = 0.2,
+      conf.int.style="ribbon" #, "step"
     )
   }
   
@@ -959,7 +961,7 @@ for ( i in 1:length(p)){
 
 # e) export --------------------------------------------------------------------
 
-pdf(myFig1, width = 15,height = 30)
+pdf(myFig1, width = 15,height = 10)
 do.call("grid.arrange", c(plotlist = p.list1, ncol=3))
 dev.off() 
 
