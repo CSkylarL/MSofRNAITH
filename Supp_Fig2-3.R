@@ -16,7 +16,7 @@ library(fst)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Supp_Fig2/"
+outdir <- "./Supp_Fig2-3/"
 dir.create(outdir)
 
 myinf1 <- "~/Mydata/TRACERx421_zenodo.7819449/20221014_transcriptomic_DATA/20221109_TRACERx421_all_patient_df.rds"
@@ -227,7 +227,7 @@ library(fst)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Supp_Fig2/"
+outdir <- "./Supp_Fig2-3/"
 dir.create(outdir)
 
 myinf1 <- "~/Mydata/TRACERx421_zenodo.7819449/20221014_transcriptomic_DATA/20221109_TRACERx421_all_patient_df.rds"
@@ -464,7 +464,7 @@ library(fst)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Supp_Fig2/"
+outdir <- "./Supp_Fig2-3/"
 dir.create(outdir)
 
 myinf1 <- "~/Mydata/TRACERx421_zenodo.7819449/20221014_transcriptomic_DATA/20221109_TRACERx421_all_patient_df.rds"
@@ -693,7 +693,7 @@ library(fst)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Supp_Fig2/"
+outdir <- "./Supp_Fig2-3/"
 dir.create(outdir)
 
 myinf1 <- "~/Mydata/TRACERx421_zenodo.7819449/20221014_transcriptomic_DATA/20221109_TRACERx421_all_patient_df.rds"
@@ -897,7 +897,7 @@ library(fst)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Supp_Fig2/"
+outdir <- "./Supp_Fig2-3/"
 dir.create(outdir)
 
 myinf1 <- "~/Mydata/TRACERx421_zenodo.7819449/20221014_transcriptomic_DATA/20221109_TRACERx421_all_patient_df.rds"
@@ -1130,7 +1130,7 @@ library(fst)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Supp_Fig2/"
+outdir <- "./Supp_Fig2-3/"
 dir.create(outdir)
 
 myinf1 <- "~/Mydata/TRACERx421_zenodo.7819449/20221014_transcriptomic_DATA/20221109_TRACERx421_all_patient_df.rds"
