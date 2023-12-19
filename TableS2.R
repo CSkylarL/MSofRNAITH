@@ -1,5 +1,5 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-# Table S3 : Try Other signatures (Table 1 supp)
+# Table S2 : Try Other signatures (Table 1 supp)
 # Author: Chenyang Li
 # 09/20/2023
 # TRACERx 421
@@ -12,7 +12,7 @@ rm(list=ls())
 library(fst)
 library(survival)
 library(dplyr)
-outdir <- "./TableS3/"
+outdir <- "./TableS2/"
 dir.create(outdir)
 
 myinf0 <- "./Table1/Collected_Gene_Signatures_coefficients.csv"
