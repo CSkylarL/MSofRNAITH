@@ -9,7 +9,7 @@
 # [1.1] ORACLE Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
 myinf2 <- paste0(outdir,"/ORACLE.txt")
@@ -122,7 +122,7 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- paste0(outdir,"/ORACLE_scores_TRACERx.txt")
 myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
@@ -244,7 +244,7 @@ dev.off()
 # [1.3] WTGS Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
 myinf2 <- "./BASE/TCGA-Lung-Prog-Profile_4base.txt"
@@ -384,7 +384,7 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- paste0(outdir,"/WTGS_scores_TRACERx.txt")
 myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
@@ -506,7 +506,7 @@ dev.off()
 # [1.5] PACEG Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- "~/Mydata/CohortD_TRACERx/data/RNAseq_Genes_rsem_Symbol_FPKM.txt"
 myinf2 <- paste0(outdir,"/PACEG.txt")
@@ -618,7 +618,7 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- paste0(outdir,"/PACEG_scores_TRACERx.txt")
 myinf2 <- "~/Mydata/CohortD_TRACERx/Clinical_Sample_info/CohortD_TRACERx_clincal_info.csv"
@@ -741,7 +741,7 @@ dev.off()
 # [2.1] ORACLE Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <-  "./data/MDAMPLC.rda"
 myinf2 <- paste0(outdir,"/ORACLE.txt")
@@ -856,7 +856,7 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- paste0(outdir,"/ORACLE_scores_CPRIT-MIRA.txt")
 myinf2 <- "./data/MDAMPLC.rda"
@@ -993,7 +993,7 @@ dev.off()
 # [2.3] WTGS Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- "./data/MDAMPLC.rda"
 
@@ -1137,7 +1137,7 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- paste0(outdir,"/WTGS_scores_CPRIT-MIRA.txt")
 myinf2 <- "./data/MDAMPLC.rda"
@@ -1281,7 +1281,7 @@ dev.off()
 # [2.5] PACEG Score ===========================================================
 rm(list=ls())
 library(survival)
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- "./data/MDAMPLC.rda"
 myinf2 <- paste0(outdir,"/PACEG.txt")
@@ -1394,7 +1394,7 @@ library(survival)
 library(forestplot)
 library(ggplot2)
 
-outdir <- "./Fig3/"
+outdir <- "./Fig3_Supp4/"
 
 myinf1 <- paste0(outdir,"/PACEG_scores_CPRIT-MIRA.txt")
 myinf2 <- "./data/MDAMPLC.rda"
@@ -1537,7 +1537,7 @@ dev.off()
 library(survival)
 # a) Load data LUAD ------------------------------------------------------------
 rm(list = ls())
-outdir <- "./Fig3/Other_signatures"
+outdir <- "./Fig3_Supp4/Other_signatures"
 myinf0 <- paste0(outdir,"/Collected_Gene_Signatures.csv")
 myinf1 <- "~/Mydata/TCGA_LUAD/LUAD_RNAseqv2_ALL_Symbol.rda"
 myinf2 <- "~/Mydata/TCGA_LUAD/LUAD_Clincial_info.txt"
@@ -1636,7 +1636,7 @@ rm(list=ls())
 library(survival)
 library(forestplot)
 library(ggplot2)
-outdir <- "./Fig3/Other_signatures"
+outdir <- "./Fig3_Supp4/Other_signatures"
 
 myinf0 <- paste0(outdir,"/Collected_Gene_Signatures_coefficients.csv")
 myoutf0 <- paste0(outdir,"/Collected_Gene_Signatures_summary.csv")
