@@ -1,18 +1,18 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-# Table S3 : Try Other signatures (Table 1 supp)
+# Table S2 : Try Other signatures (Table 1 supp)
 # Author: Chenyang Li
 # 09/20/2023
 # TRACERx 421
-# Additional validation: TRACERx 421 excluding TRACERx 100 (TRACERx421-100)
+# LUAD subtype: TRACERx421_LUAD
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #  Collected_Gene_Signatures   #################################################
-# [II] TRACERx421_nonTRACERx100 ========================================================
+# [II] TRACERx421_LUAD ========================================================
 rm(list=ls())
 library(fst)
 library(survival)
 library(dplyr)
-outdir <- "./TableS3/"
+outdir <- "./TableS2/"
 dir.create(outdir)
 
 myinf0 <- "./Table1/Collected_Gene_Signatures_coefficients.csv"
@@ -22,10 +22,9 @@ myinf3 <- "~/Mydata/TRACERx421_zenodo.7819449/20221014_transcriptomic_DATA/2022-
 myinf4 <- "~/Mydata/TRACERx421_zenodo.7819449/20221014_transcriptomic_DATA/2022-10-17_rsem_tpm_mat.fst"
 
 
-myoutf0 <- paste0(outdir,"/Collected_Gene_Signatures_summary_TRACERx421_nonTRACERx100.csv")
+myoutf0 <- paste0(outdir,"/Collected_Gene_Signatures_summary_TRACERx421_LUAD.csv")
 
 # data -------------------------------------------------------------------------
-
 patient <- readRDS(myinf1)
 tumor <- readRDS(myinf2)
 region <- read_fst(myinf3) %>% 
@@ -36,14 +35,19 @@ rna <- read_fst(myinf4)
 rownames(rna) <- rna$gene_id
 rna <- rna[-1]
 
-table(patient$tx100)
-# FALSE  TRUE 
-# 323    98 
+table(patient$histology_multi_full_genomically.confirmed)
+# LUAD  LUAD&LUSC LUAD&Other     LUADx2     LUADx3       LUSC      Other 
+# 231          4          1          5          1        134         45 
 
-se <- which(patient$tx100 == FALSE)
+# LUAD + all have LUAD subtypes: LUAD&LUSC LUAD&Other     LUADx2     LUADx3  
+
+se <- grep(pattern = "LUAD", 
+           x = patient$histology_multi_full_genomically.confirmed)
 info <- patient[se,]
-dim(info) # 323  50
-
+dim(info) # 242
+table(info$histology_multi_full_genomically.confirmed)
+# LUAD  LUAD&LUSC LUAD&Other     LUADx2     LUADx3 
+# 231          4          1          5          1 
 PID <- info$cruk_id
 rownames(info) <- PID
 tumor_LUAD <- tumor %>% filter (cruk_id %in% PID)
@@ -62,7 +66,7 @@ info <- cbind(t.surv, e.surv, info)
 pid <- substr(colnames(rna), 1, 8)
 comxx <- intersect(row.names(info), pid)
 info <- info[comxx,]
-dim(info) # 261  52
+dim(info) # 187 54
 
 se <- which(pid %in% comxx)
 # patient ID of expression data
@@ -71,7 +75,7 @@ rna <- rna[,se]
 # unique patient ID of survival data
 mypat <- row.names(info)
 
-dim(rna) #   28073   652
+dim(rna) #   28073   472
 
 # Signature --------------------------------------------------------------------
 sig.sum <- read.csv(myinf0)
@@ -87,8 +91,8 @@ for ( iii in sig.name) {
   mysig <- sig.sum[se,]
   
   #  mysig Score ----------------------------------------------------------
-  
-  myoutf1 <- paste0(outdir,"/Collected_Gene_Signatures_", iii ,"_scores_TRACERx421_nonTRACERx100.txt")
+ 
+  myoutf1 <- paste0(outdir,"/Collected_Gene_Signatures_", iii ,"_scores_TRACERx421_LUAD.txt")
   # a) expression and signature  -------------------------------------------------
   data <- rna
   
@@ -164,7 +168,7 @@ for ( iii in sig.name) {
   all(rownames(res.m1) == rownames(res.m2)) #T
   res <- cbind(res.m1,res.m2)
   write.table(res, myoutf1, sep="\t", quote=F)
-  
+
   # a) load data -----------------------------------------------------------------
   data <- res
   
@@ -199,7 +203,7 @@ for ( iii in sig.name) {
     
   }
   
-  mytmp <- data.frame("Cohort" = rep("TRACERx421_nonTRACERx100",8),
+  mytmp <- data.frame("Cohort" = rep("TRACERx421_LUAD",8),
                       "Signature" = rep(iii,8),
                       "N" = rep(paste0(my_gene_number,"/", nrow(mysig) ),8))
   mytmp <- cbind(mytmp,p.data[1:3])

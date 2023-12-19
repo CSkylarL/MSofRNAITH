@@ -1404,6 +1404,7 @@ myFig2 <- paste0(outdir,"/PACEG_scores_CIbar_CPRIT-MIRA.pdf")
 
 # a) load data -----------------------------------------------------------------
 data <- read.table(myinf1, sep="\t", header=T, row.names=1, quote="")
+load(myinf2) 
 info <- Clinical.info
 colnames(info) <-  c("t.surv","e.surv", 
                      "Smoker.current.never.former",
