@@ -17,8 +17,8 @@ This includes all codes and data used in RNA-ITH manuscript (Multiregional trans
 For more details, please read our manuscript: [Multiregional transcriptomic profiling provides improved prognostic insight in localized non-small cell lung cancer.](link)
 
 ## Citation
-Those codes, signatures and our methods to integrate RNA-ITH in prognsotic models are intended for research use only. 
+Those codes, signatures, and our methods to integrate RNA-ITH in prognostic models are intended for research use only. 
 
 If you use them in your publication, please cite the paper: 
 
-Li, C. et al. Multiregional transcriptomic profiling provides improved prognostic insight in localized non-small cell lung cancer. (In submission).
+Li, C. et al. Multiregional transcriptomic profiling provides improved prognostic insight in localized non-small cell lung cancer. npj Precision Oncology (In press).
